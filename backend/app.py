@@ -203,6 +203,7 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
     """
     Background task to process video
     """
+    print(f"[DEBUG] Background task started for job_id: {job_id}")
     try:
         log_job_progress(
             job_id,
@@ -211,6 +212,7 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
             progress=5,
             message="開始處理任務..."
         )
+        print(f"[DEBUG] Job {job_id} progress logged: prepare 5%")
 
         start_time = time.time()
 
@@ -657,6 +659,9 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
         )
 
     except Exception as e:
+        print(f"[ERROR] Background task failed for job_id {job_id}: {str(e)}")
+        import traceback
+        traceback.print_exc()
         jobs[job_id]["error"] = str(e)
         log_job_progress(
             job_id,

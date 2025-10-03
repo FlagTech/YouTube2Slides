@@ -14,6 +14,7 @@ function App() {
   const [error, setError] = useState(null);
 
   const handleSubmit = async (videoData) => {
+    console.log('[App] Starting video processing with data:', videoData);
     setProcessing(true);
     setError(null);
     setResult(null);
@@ -21,22 +22,27 @@ function App() {
     try {
       const response = await processVideo(videoData);
       const newJobId = response.job_id;
+      console.log('[App] Job created with ID:', newJobId);
       setJobId(newJobId);
 
       // Poll for job status
       pollJobStatus(newJobId);
     } catch (err) {
+      console.error('[App] Error processing video:', err);
       setError(err.message || 'Failed to process video');
       setProcessing(false);
     }
   };
 
   const pollJobStatus = async (currentJobId) => {
+    console.log('[App] Starting to poll job status for:', currentJobId);
     const interval = setInterval(async () => {
       try {
         const status = await getJobStatus(currentJobId);
+        console.log('[App] Polled job status:', status);
 
         if (status.status === 'completed') {
+          console.log('[App] Job completed, stopping poll');
           clearInterval(interval);
           setResult(status.result);
           setProcessing(false);
@@ -44,11 +50,13 @@ function App() {
           // Save to history
           saveToHistory(status.result, currentJobId);
         } else if (status.status === 'failed') {
+          console.log('[App] Job failed:', status.error);
           clearInterval(interval);
           setError(status.error || 'Processing failed');
           setProcessing(false);
         }
       } catch (err) {
+        console.error('[App] Error polling job status:', err);
         clearInterval(interval);
         setError('Failed to get job status');
         setProcessing(false);

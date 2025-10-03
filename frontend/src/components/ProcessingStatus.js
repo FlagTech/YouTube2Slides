@@ -72,8 +72,12 @@ function ProcessingStatus({ jobId }) {
   }, [targetProgress]);
 
   useEffect(() => {
-    if (!jobId) return;
+    if (!jobId) {
+      console.log('[ProcessingStatus] No jobId provided, skipping poll');
+      return;
+    }
 
+    console.log('[ProcessingStatus] Starting poll for jobId:', jobId);
     let isMounted = true;
     const pollStatus = async () => {
       try {
@@ -110,6 +114,7 @@ function ProcessingStatus({ jobId }) {
           if (newStatus === 'completed') {
             setDisplayProgress(100);
           }
+          console.log('[ProcessingStatus] Job finished, stopping poll');
           return false;
         }
       } catch (err) {
@@ -135,6 +140,7 @@ function ProcessingStatus({ jobId }) {
     pollStatus();
 
     return () => {
+      console.log('[ProcessingStatus] Cleanup: stopping poll for jobId:', jobId);
       isMounted = false;
       clearInterval(interval);
     };
