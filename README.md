@@ -49,7 +49,7 @@
 
 **不需要安裝任何東西！** 腳本會自動安裝所有需要的工具。
 
-**Windows 用戶:**
+#### Windows 用戶
 
 1️⃣ 下載 zip 壓縮檔
 
@@ -57,10 +57,33 @@
 
 3️⃣ 雙擊執行 **setup_and_start.bat** （會自動安裝 Node.js、ffmpeg、uv 等工具）
 
-**Linux/macOS 用戶:**
+#### macOS 用戶
+
+1️⃣ 開啟終端機（Terminal）
+
+2️⃣ 進入專案資料夾：
+```bash
+cd ~/Downloads/YouTube2Slides
+```
+
+3️⃣ 執行自動安裝腳本：
 ```bash
 python3 setup_and_start.py
 ```
+
+**注意事項：**
+- 腳本會自動檢測是否已安裝 Homebrew
+- 如果未安裝，會提示安裝指令
+- 缺少的套件會透過 Homebrew 自動安裝
+- 服務啟動後會在終端機中顯示輸出，按 Ctrl+C 停止
+
+#### Linux 用戶
+
+```bash
+python3 setup_and_start.py
+```
+
+腳本會提示使用 apt 安裝依賴（適用於 Ubuntu/Debian）
 
 ### 一鍵啟動（已安裝依賴的用戶）
 

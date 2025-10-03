@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 YouTube 影片懶人觀看術 - 自動安裝與啟動腳本
 自動檢查並安裝所有依賴，然後啟動服務
@@ -13,6 +14,13 @@ import tempfile
 import shutil
 from pathlib import Path
 
+# 設定 Windows 終端機的 UTF-8 編碼
+if platform.system() == 'Windows':
+    import codecs
+    if sys.stdout.encoding != 'utf-8':
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+        sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
+
 def print_header():
     """顯示標題"""
     print("=" * 60)
@@ -23,14 +31,21 @@ def print_header():
 def check_command(command):
     """檢查命令是否存在"""
     try:
-        subprocess.run(
+        result = subprocess.run(
             [command, '--version'],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            check=True
+            check=False,
+            encoding='utf-8',
+            errors='ignore'
         )
-        return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
+        # 對於某些命令，即使成功也可能返回非零代碼
+        # 只要能執行且有輸出就視為存在
+        return result.returncode == 0 or len(result.stdout) > 0 or len(result.stderr) > 0
+    except FileNotFoundError:
+        return False
+    except Exception as e:
+        print(f"  [除錯] 檢查 {command} 時發生錯誤: {e}")
         return False
 
 def install_python_windows():
@@ -104,14 +119,32 @@ def install_with_package_manager():
 
     if system == "Darwin":  # macOS
         print("[提示] 在 macOS 上，建議使用 Homebrew 安裝依賴")
-        print("請執行以下命令：")
-        print("  brew install python node ffmpeg")
-        print()
-        response = input("是否已安裝 Homebrew? (y/n): ").lower()
-        if response == 'y':
-            subprocess.run(['brew', 'install', 'python', 'node', 'ffmpeg'])
+
+        # 檢查是否已安裝 Homebrew
+        has_brew = False
+        try:
+            subprocess.run(['brew', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            has_brew = True
+            print("✓ 偵測到 Homebrew 已安裝")
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            print("✗ 未安裝 Homebrew")
+
+        if has_brew:
+            print("\n準備使用 Homebrew 安裝缺少的套件...")
+            response = input("是否繼續? (y/n): ").lower()
+            if response == 'y':
+                try:
+                    subprocess.run(['brew', 'install', 'python', 'node', 'ffmpeg'], check=False)
+                    print("✓ 套件安裝完成")
+                except Exception as e:
+                    print(f"⚠ 安裝過程中發生錯誤: {e}")
+            else:
+                print("請手動安裝缺少的套件")
+                sys.exit(1)
         else:
-            print("請先安裝 Homebrew: https://brew.sh/")
+            print("\n請先安裝 Homebrew:")
+            print("  /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"")
+            print("\n或手動安裝所需套件後再執行此腳本")
             sys.exit(1)
 
     elif system == "Linux":
@@ -220,17 +253,31 @@ def setup_project():
     backend_venv = Path('backend/.venv')
     frontend_modules = Path('frontend/node_modules')
 
-    # 檢查後端虛擬環境
+    # 檢查後端虛擬環境與依賴
     if not backend_venv.exists():
         print("[提示] 首次運行，正在初始化後端環境...")
         subprocess.run(['uv', 'venv'], cwd='backend', check=True)
-        print("✓ 後端環境初始化完成")
+        print("✓ 後端虛擬環境創建完成")
+
+        print("[提示] 正在安裝後端依賴套件...")
+        subprocess.run(['uv', 'sync'], cwd='backend', check=True)
+        print("✓ 後端依賴安裝完成")
+    else:
+        # 檢查是否需要更新依賴
+        print("[檢查] 檢查後端依賴是否需要更新...")
+        try:
+            subprocess.run(['uv', 'sync', '--no-install-project'], cwd='backend', check=True)
+            print("✓ 後端依賴已是最新")
+        except subprocess.CalledProcessError:
+            print("⚠ 後端依賴更新失敗，請手動執行: cd backend && uv sync")
 
     # 檢查前端依賴
     if not frontend_modules.exists():
         print("[提示] 首次運行，正在安裝前端依賴...")
         subprocess.run(['npm', 'install'], cwd='frontend', check=True)
         print("✓ 前端依賴安裝完成")
+    else:
+        print("✓ 前端依賴已存在")
 
     print()
 
@@ -254,11 +301,10 @@ def start_services():
             creationflags=subprocess.CREATE_NEW_CONSOLE
         )
     else:
+        # macOS/Linux: 在背景執行並顯示輸出
         backend_process = subprocess.Popen(
             backend_cmd,
-            cwd='backend',
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            cwd='backend'
         )
 
     # 等待後端啟動
@@ -279,11 +325,10 @@ def start_services():
             shell=True
         )
     else:
+        # macOS/Linux: 在背景執行並顯示輸出
         frontend_process = subprocess.Popen(
             frontend_cmd,
-            cwd='frontend',
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            cwd='frontend'
         )
 
     print()
@@ -302,7 +347,9 @@ def start_services():
         print()
         input("按 Enter 鍵退出此腳本...")
     else:
+        print("服務正在執行中...")
         print("按 Ctrl+C 停止所有服務")
+        print()
         try:
             backend_process.wait()
             frontend_process.wait()
@@ -310,9 +357,13 @@ def start_services():
             print("\n正在停止服務...")
             backend_process.terminate()
             frontend_process.terminate()
-            backend_process.wait()
-            frontend_process.wait()
-            print("服務已停止")
+            try:
+                backend_process.wait(timeout=5)
+                frontend_process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                backend_process.kill()
+                frontend_process.kill()
+            print("✓ 服務已停止")
 
 def main():
     """主函數"""

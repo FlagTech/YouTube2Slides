@@ -26,6 +26,35 @@ class SubtitleOptimizer:
             r'([.!?。！？]|\.\.\.|\…)(\s+(?=[A-Z])|$)'
         )
 
+        # Language-specific sentence markers (for languages without punctuation in auto-generated subtitles)
+        self.language_markers = {
+            'ja': {  # Japanese
+                'endings': ['です', 'ます', 'でした', 'ました', 'だった', 'である', 'でしょう', 'ません', 'ない'],
+                'particles': ['か', 'ね', 'よ', 'な', 'わ', 'ぞ', 'ぜ', 'さ', 'の']
+            },
+            'ko': {  # Korean
+                'endings': ['니다', '습니다', '었습니다', '였습니다', '는데요', '어요', '아요'],
+                'particles': ['요', '네요', '까요', '세요', '죠', '군요']
+            },
+            'zh': {  # Chinese (including zh-TW, zh-CN)
+                'endings': ['了', '過', '著'],
+                'particles': ['吧', '呢', '啊', '嗎', '嘛', '的', '喔', '哦', '耶']
+            },
+            'th': {  # Thai
+                'endings': ['แล้ว', 'อยู่', 'ไป', 'มา'],
+                'particles': ['ครับ', 'ค่ะ', 'นะ', 'จ้ะ', 'จ๊ะ', 'ล่ะ']
+            }
+        }
+
+        # General merge configuration (for languages without punctuation)
+        self.merge_config = {
+            'min_chars': 40,         # Minimum characters per segment
+            'target_chars': 80,      # Target characters per segment
+            'max_chars': 150,        # Maximum characters per segment
+            'max_time_gap': 1.5,     # Maximum time gap between segments (seconds)
+            'min_segments': 2,       # Minimum segments to merge
+        }
+
     def contains_complete_sentence(self, text: str) -> bool:
         """
         Check if text contains at least one complete sentence
@@ -46,19 +75,63 @@ class SubtitleOptimizer:
         match = self.sentence_pattern.search(text)
         return match is not None
 
-    def should_merge_with_next(self, text: str) -> bool:
+    def detect_language_ending(self, text: str, language: str = None) -> bool:
+        """
+        Check if text ends with language-specific sentence markers
+
+        Args:
+            text: Text to check
+            language: Language code (ja, ko, zh, th, etc.)
+
+        Returns:
+            True if text ends with a sentence marker
+        """
+        if not text or not language:
+            return False
+
+        # Extract base language code (e.g., 'zh-TW' -> 'zh')
+        lang_base = language.split('-')[0].lower()
+
+        if lang_base not in self.language_markers:
+            return False
+
+        markers = self.language_markers[lang_base]
+        text_stripped = text.strip()
+
+        # Check if text ends with any ending marker
+        for ending in markers.get('endings', []):
+            if text_stripped.endswith(ending):
+                return True
+
+        # Check if text ends with any particle
+        for particle in markers.get('particles', []):
+            if text_stripped.endswith(particle):
+                return True
+
+        return False
+
+    def should_merge_with_next(self, text: str, language: str = None) -> bool:
         """
         Determine if this subtitle segment should be merged with the next one
         Strategy: Merge until we have a complete sentence
 
         Args:
             text: Subtitle text
+            language: Language code (optional)
 
         Returns:
             True if should merge with next segment
         """
-        # If text contains a complete sentence, stop merging
-        return not self.contains_complete_sentence(text)
+        # First check for punctuation-based sentence
+        if self.contains_complete_sentence(text):
+            return False
+
+        # If no punctuation, check language-specific markers
+        if language and self.detect_language_ending(text, language):
+            return False
+
+        # Default: merge
+        return True
 
     def _has_ending_punctuation(self, text: str) -> bool:
         """Check if text ends with any punctuation"""
@@ -69,13 +142,48 @@ class SubtitleOptimizer:
         last_char = text[-1]
         return last_char in (self.sentence_endings | self.pause_marks)
 
-    def optimize_srt_file(self, input_path: str, output_path: str = None) -> str:
+    def _parse_timestamp(self, timestamp: str) -> float:
+        """
+        Convert SRT timestamp to seconds
+
+        Args:
+            timestamp: Timestamp string (e.g., '00:01:23,456')
+
+        Returns:
+            Time in seconds
+        """
+        try:
+            # Format: HH:MM:SS,mmm
+            time_part, ms_part = timestamp.split(',')
+            h, m, s = map(int, time_part.split(':'))
+            ms = int(ms_part)
+            return h * 3600 + m * 60 + s + ms / 1000.0
+        except:
+            return 0.0
+
+    def _calculate_time_gap(self, seg1: dict, seg2: dict) -> float:
+        """
+        Calculate time gap between two segments
+
+        Args:
+            seg1: First segment
+            seg2: Second segment
+
+        Returns:
+            Time gap in seconds
+        """
+        end_time1 = self._parse_timestamp(seg1['end_time'])
+        start_time2 = self._parse_timestamp(seg2['start_time'])
+        return start_time2 - end_time1
+
+    def optimize_srt_file(self, input_path: str, output_path: str = None, language: str = None) -> str:
         """
         Optimize SRT file by merging segments into complete sentences
 
         Args:
             input_path: Path to input SRT file
-            output_path: Path to output SRT file (if None, overwrites input)
+            output_path: Path to output SRT file (if None, creates .optimized version)
+            language: Language code (e.g., 'ja', 'ko', 'zh', 'en')
 
         Returns:
             Path to optimized SRT file
@@ -88,13 +196,42 @@ class SubtitleOptimizer:
         # Parse SRT file
         segments = self._parse_srt(input_path)
 
-        # Merge segments
-        merged_segments = self._merge_segments(segments)
+        # Detect if subtitles have punctuation
+        has_punctuation = self._detect_punctuation(segments)
+
+        # Choose merging strategy
+        if has_punctuation:
+            # Use punctuation-based merging
+            merged_segments = self._merge_segments(segments, language)
+        else:
+            # Use smart merging for auto-generated subtitles
+            merged_segments = self._smart_merge(segments, language)
 
         # Write optimized SRT
         self._write_srt(merged_segments, output_path)
 
         return output_path
+
+    def _detect_punctuation(self, segments: List[dict]) -> bool:
+        """
+        Detect if segments contain punctuation marks
+
+        Args:
+            segments: List of subtitle segments
+
+        Returns:
+            True if punctuation found in at least 30% of segments
+        """
+        if not segments:
+            return False
+
+        punct_count = 0
+        for seg in segments[:min(20, len(segments))]:  # Check first 20 segments
+            text = seg['text']
+            if any(p in text for p in self.sentence_endings | self.pause_marks):
+                punct_count += 1
+
+        return punct_count / min(20, len(segments)) > 0.3
 
     def _parse_srt(self, srt_path: str) -> List[dict]:
         """Parse SRT file into segments"""
@@ -170,7 +307,81 @@ class SubtitleOptimizer:
 
         return (first_sentence, remaining)
 
-    def _merge_segments(self, segments: List[dict]) -> List[dict]:
+    def _smart_merge(self, segments: List[dict], language: str = None) -> List[dict]:
+        """
+        Smart merging for subtitles without punctuation
+        Uses time gaps, text length, and language-specific markers
+
+        Args:
+            segments: List of subtitle segments
+            language: Language code
+
+        Returns:
+            List of merged segments
+        """
+        if not segments:
+            return []
+
+        merged = []
+        i = 0
+
+        while i < len(segments):
+            current = {
+                'start_time': segments[i]['start_time'],
+                'end_time': segments[i]['end_time'],
+                'text': segments[i]['text']
+            }
+
+            # Keep merging while conditions are met
+            while i < len(segments) - 1:
+                next_seg = segments[i + 1]
+                current_len = len(current['text'])
+
+                # Calculate time gap
+                time_gap = self._calculate_time_gap(
+                    {'end_time': current['end_time']},
+                    {'start_time': next_seg['start_time']}
+                )
+
+                # Decision criteria
+                should_merge = False
+
+                # 1. If current text is too short, keep merging
+                if current_len < self.merge_config['min_chars']:
+                    should_merge = True
+
+                # 2. If time gap is small and not too long yet
+                elif (time_gap < self.merge_config['max_time_gap'] and
+                      current_len < self.merge_config['target_chars']):
+                    should_merge = True
+
+                # 3. Check language-specific ending
+                elif language:
+                    if not self.detect_language_ending(current['text'], language):
+                        # No language ending detected, continue merging
+                        if current_len < self.merge_config['max_chars']:
+                            should_merge = True
+
+                # Stop merging if reached max length
+                if current_len >= self.merge_config['max_chars']:
+                    should_merge = False
+
+                if not should_merge:
+                    break
+
+                # Merge next segment
+                i += 1
+                if current['text'] and not current['text'].endswith(' '):
+                    current['text'] += ' '
+                current['text'] += next_seg['text']
+                current['end_time'] = next_seg['end_time']
+
+            merged.append(current)
+            i += 1
+
+        return merged
+
+    def _merge_segments(self, segments: List[dict], language: str = None) -> List[dict]:
         """
         Merge subtitle segments into complete sentences (one sentence per segment)
 

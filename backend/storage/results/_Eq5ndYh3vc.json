@@ -1,0 +1,811 @@
+{
+  "job_id": "7b36b4e4-a7e5-471f-bdd8-2a6b0134cae1",
+  "video_id": "_Eq5ndYh3vc",
+  "timestamp": "2025-10-03T09:00:05.375267Z",
+  "result": {
+    "video_id": "_Eq5ndYh3vc",
+    "title": "英國中東裔屁孩騷擾華人店主，華裔客人霸氣出手讓屁孩秒孬掉 (中文字幕)",
+    "total_frames": 88,
+    "frames": [
+      {
+        "index": 1,
+        "timestamp": 1.1595,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0001_1.16s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0001_1.16s.jpg",
+        "subtitle": "the ball.",
+        "subtitle_translated": "足球。",
+        "size_bytes": 132616
+      },
+      {
+        "index": 2,
+        "timestamp": 1.6800000000000002,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0002_1.68s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0002_1.68s.jpg",
+        "subtitle": "the ball.",
+        "subtitle_translated": "足球。",
+        "size_bytes": 128137
+      },
+      {
+        "index": 3,
+        "timestamp": 2.9189999999999996,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0003_2.92s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0003_2.92s.jpg",
+        "subtitle": "ball, man.",
+        "subtitle_translated": "足球，先生。",
+        "size_bytes": 106844
+      },
+      {
+        "index": 4,
+        "timestamp": 3.88,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0004_3.88s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0004_3.88s.jpg",
+        "subtitle": "Yeah, don't touch it then.",
+        "subtitle_translated": "沒事，別碰它。",
+        "size_bytes": 107002
+      },
+      {
+        "index": 5,
+        "timestamp": 4.759,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0005_4.76s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0005_4.76s.jpg",
+        "subtitle": "Yeah, don't touch it then.",
+        "subtitle_translated": "沒事，別碰它。",
+        "size_bytes": 86454
+      },
+      {
+        "index": 6,
+        "timestamp": 6.1594999999999995,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0006_6.16s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0006_6.16s.jpg",
+        "subtitle": "Don't touch the ball.",
+        "subtitle_translated": "别碰足球。",
+        "size_bytes": 90733
+      },
+      {
+        "index": 7,
+        "timestamp": 7.0795,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0007_7.08s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0007_7.08s.jpg",
+        "subtitle": "Don't touch the ball.",
+        "subtitle_translated": "别碰足球。",
+        "size_bytes": 94917
+      },
+      {
+        "index": 8,
+        "timestamp": 8.0795,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0008_8.08s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0008_8.08s.jpg",
+        "subtitle": "Don't touch the ball.",
+        "subtitle_translated": "别碰足球。",
+        "size_bytes": 90365
+      },
+      {
+        "index": 9,
+        "timestamp": 9.04,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0009_9.04s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0009_9.04s.jpg",
+        "subtitle": "Don't touch the ball.",
+        "subtitle_translated": "别碰足球。",
+        "size_bytes": 100564
+      },
+      {
+        "index": 10,
+        "timestamp": 10.440000000000001,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0010_10.44s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0010_10.44s.jpg",
+        "subtitle": "Excuse me.",
+        "subtitle_translated": "不好意思。",
+        "size_bytes": 104688
+      },
+      {
+        "index": 11,
+        "timestamp": 11.280000000000001,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0011_11.28s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0011_11.28s.jpg",
+        "subtitle": "Excuse me.",
+        "subtitle_translated": "不好意思。",
+        "size_bytes": 115007
+      },
+      {
+        "index": 12,
+        "timestamp": 13.04,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0012_13.04s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0012_13.04s.jpg",
+        "subtitle": "Come on. Get out.",
+        "subtitle_translated": "快走！",
+        "size_bytes": 102576
+      },
+      {
+        "index": 13,
+        "timestamp": 14.48,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0013_14.48s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0013_14.48s.jpg",
+        "subtitle": "Yeah. Get out.",
+        "subtitle_translated": "對啊，走吧。",
+        "size_bytes": 98081
+      },
+      {
+        "index": 14,
+        "timestamp": 15.5595,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0014_15.56s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0014_15.56s.jpg",
+        "subtitle": "Yeah. Get out.",
+        "subtitle_translated": "對啊，走吧。",
+        "size_bytes": 93910
+      },
+      {
+        "index": 15,
+        "timestamp": 18.4,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0015_18.40s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0015_18.40s.jpg",
+        "subtitle": "Stop messing.",
+        "subtitle_translated": "别鬧了。",
+        "size_bytes": 107871
+      },
+      {
+        "index": 16,
+        "timestamp": 19.759500000000003,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0016_19.76s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0016_19.76s.jpg",
+        "subtitle": "Stop messing.",
+        "subtitle_translated": "别鬧了。",
+        "size_bytes": 83124
+      },
+      {
+        "index": 17,
+        "timestamp": 23.22,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0017_23.22s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0017_23.22s.jpg",
+        "subtitle": "Huh?",
+        "subtitle_translated": "什麼？",
+        "size_bytes": 105242
+      },
+      {
+        "index": 18,
+        "timestamp": 24.14,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0018_24.14s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0018_24.14s.jpg",
+        "subtitle": "Huh?",
+        "subtitle_translated": "什麼？",
+        "size_bytes": 101830
+      },
+      {
+        "index": 19,
+        "timestamp": 28.759999999999998,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0019_28.76s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0019_28.76s.jpg",
+        "subtitle": "Just weirdos. Crazy",
+        "subtitle_translated": "只是怪咖。瘋狂",
+        "size_bytes": 97544
+      },
+      {
+        "index": 20,
+        "timestamp": 30.48,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0020_30.48s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0020_30.48s.jpg",
+        "subtitle": "Just weirdos. Crazy",
+        "subtitle_translated": "只是怪咖。瘋狂",
+        "size_bytes": 121231
+      },
+      {
+        "index": 21,
+        "timestamp": 32.519999999999996,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0021_32.52s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0021_32.52s.jpg",
+        "subtitle": "Check him out.",
+        "subtitle_translated": "瞧他一下。",
+        "size_bytes": 119733
+      },
+      {
+        "index": 22,
+        "timestamp": 34.68,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0022_34.68s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0022_34.68s.jpg",
+        "subtitle": "We don't know them.",
+        "subtitle_translated": "我們不認識他們。",
+        "size_bytes": 122479
+      },
+      {
+        "index": 23,
+        "timestamp": 36.519499999999994,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0023_36.52s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0023_36.52s.jpg",
+        "subtitle": "We don't know them.",
+        "subtitle_translated": "我們不認識他們。",
+        "size_bytes": 89593
+      },
+      {
+        "index": 24,
+        "timestamp": 38.239999999999995,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0024_38.24s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0024_38.24s.jpg",
+        "subtitle": "Happy birthday to you.",
+        "subtitle_translated": "祝你生日快樂。",
+        "size_bytes": 117723
+      },
+      {
+        "index": 25,
+        "timestamp": 39.2795,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0025_39.28s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0025_39.28s.jpg",
+        "subtitle": "What?",
+        "subtitle_translated": "什麼？",
+        "size_bytes": 100524
+      },
+      {
+        "index": 26,
+        "timestamp": 40.64,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0026_40.64s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0026_40.64s.jpg",
+        "subtitle": "Put this down.",
+        "subtitle_translated": "放下那個。",
+        "size_bytes": 100347
+      },
+      {
+        "index": 27,
+        "timestamp": 42.3595,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0027_42.36s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0027_42.36s.jpg",
+        "subtitle": "It's birthday today. Thank you so much.",
+        "subtitle_translated": "今天是生日。非常感謝。",
+        "size_bytes": 97571
+      },
+      {
+        "index": 28,
+        "timestamp": 44.04,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0028_44.04s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0028_44.04s.jpg",
+        "subtitle": "It's birthday today. Thank you so much.",
+        "subtitle_translated": "今天是生日。非常感謝。",
+        "size_bytes": 85374
+      },
+      {
+        "index": 29,
+        "timestamp": 45.7595,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0029_45.76s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0029_45.76s.jpg",
+        "subtitle": "Put it down.",
+        "subtitle_translated": "把它放下。",
+        "size_bytes": 99845
+      },
+      {
+        "index": 30,
+        "timestamp": 47.28,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0030_47.28s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0030_47.28s.jpg",
+        "subtitle": "Thank you.",
+        "subtitle_translated": "謝謝。",
+        "size_bytes": 115576
+      },
+      {
+        "index": 31,
+        "timestamp": 48.5995,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0031_48.60s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0031_48.60s.jpg",
+        "subtitle": "Thank you.",
+        "subtitle_translated": "謝謝。",
+        "size_bytes": 114524
+      },
+      {
+        "index": 32,
+        "timestamp": 50.8,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0032_50.80s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0032_50.80s.jpg",
+        "subtitle": "it down. What are you doing?",
+        "subtitle_translated": "放下它。你在做什麼？",
+        "size_bytes": 82001
+      },
+      {
+        "index": 33,
+        "timestamp": 53.319,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0033_53.32s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0033_53.32s.jpg",
+        "subtitle": "You're being crazy, man.",
+        "subtitle_translated": "你在胡鬧， dude。",
+        "size_bytes": 111779
+      },
+      {
+        "index": 34,
+        "timestamp": 55.400000000000006,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0034_55.40s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0034_55.40s.jpg",
+        "subtitle": "You're being crazy, man.",
+        "subtitle_translated": "你在胡鬧， dude。",
+        "size_bytes": 94208
+      },
+      {
+        "index": 35,
+        "timestamp": 57.519499999999994,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0035_57.52s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0035_57.52s.jpg",
+        "subtitle": "Happy birthday.",
+        "subtitle_translated": "生日快樂。",
+        "size_bytes": 109370
+      },
+      {
+        "index": 36,
+        "timestamp": 58.5195,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0036_58.52s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0036_58.52s.jpg",
+        "subtitle": "Put it down now. What?",
+        "subtitle_translated": "現在放下它。什麼？",
+        "size_bytes": 112595
+      },
+      {
+        "index": 37,
+        "timestamp": 59.72,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0037_59.72s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0037_59.72s.jpg",
+        "subtitle": "Why?",
+        "subtitle_translated": "為什麼？",
+        "size_bytes": 103513
+      },
+      {
+        "index": 38,
+        "timestamp": 60.3995,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0038_60.40s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0038_60.40s.jpg",
+        "subtitle": "Why?",
+        "subtitle_translated": "為什麼？",
+        "size_bytes": 114920
+      },
+      {
+        "index": 39,
+        "timestamp": 61.439499999999995,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0039_61.44s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0039_61.44s.jpg",
+        "subtitle": "You're not allowed to. Because you're",
+        "subtitle_translated": "你不能。因為你",
+        "size_bytes": 114513
+      },
+      {
+        "index": 40,
+        "timestamp": 62.6,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0040_62.60s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0040_62.60s.jpg",
+        "subtitle": "steal it.",
+        "subtitle_translated": "要偷它。",
+        "size_bytes": 108334
+      },
+      {
+        "index": 41,
+        "timestamp": 63.9995,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0041_64.00s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0041_64.00s.jpg",
+        "subtitle": "He's stealing it.",
+        "subtitle_translated": "他在偷竊。",
+        "size_bytes": 108617
+      },
+      {
+        "index": 42,
+        "timestamp": 65.4,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0042_65.40s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0042_65.40s.jpg",
+        "subtitle": "He's stealing it.",
+        "subtitle_translated": "他在偷竊。",
+        "size_bytes": 88248
+      },
+      {
+        "index": 43,
+        "timestamp": 67.0,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0043_67.00s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0043_67.00s.jpg",
+        "subtitle": "No. He's for today. We just",
+        "subtitle_translated": "不。他今天的工作。我們只是",
+        "size_bytes": 73368
+      },
+      {
+        "index": 44,
+        "timestamp": 67.99950000000001,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0044_68.00s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0044_68.00s.jpg",
+        "subtitle": "No. No. No. Put it down.",
+        "subtitle_translated": "不。不。不。放下它。",
+        "size_bytes": 91455
+      },
+      {
+        "index": 45,
+        "timestamp": 69.24,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0045_69.24s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0045_69.24s.jpg",
+        "subtitle": "police?",
+        "subtitle_translated": "警察？",
+        "size_bytes": 97912
+      },
+      {
+        "index": 46,
+        "timestamp": 69.8395,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0046_69.84s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0046_69.84s.jpg",
+        "subtitle": "police?",
+        "subtitle_translated": "警察？",
+        "size_bytes": 107299
+      },
+      {
+        "index": 47,
+        "timestamp": 72.16,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0047_72.16s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0047_72.16s.jpg",
+        "subtitle": "Why?",
+        "subtitle_translated": "為什麼？",
+        "size_bytes": 106312
+      },
+      {
+        "index": 48,
+        "timestamp": 73.64,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0048_73.64s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0048_73.64s.jpg",
+        "subtitle": "Why?",
+        "subtitle_translated": "為什麼？",
+        "size_bytes": 116687
+      },
+      {
+        "index": 49,
+        "timestamp": 76.03999999999999,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0049_76.04s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0049_76.04s.jpg",
+        "subtitle": "Yeah, cuz you're stealing it.",
+        "subtitle_translated": "是啊，因為你在偷竊。",
+        "size_bytes": 114954
+      },
+      {
+        "index": 50,
+        "timestamp": 77.7595,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0050_77.76s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0050_77.76s.jpg",
+        "subtitle": "Put it back. Things from the shop that",
+        "subtitle_translated": "把它放回去。商店的東西",
+        "size_bytes": 93269
+      },
+      {
+        "index": 51,
+        "timestamp": 79.23949999999999,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0051_79.24s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0051_79.24s.jpg",
+        "subtitle": "No, we just asked you.",
+        "subtitle_translated": "不，我們只是問你。",
+        "size_bytes": 107933
+      },
+      {
+        "index": 52,
+        "timestamp": 80.4795,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0052_80.48s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0052_80.48s.jpg",
+        "subtitle": "No, no, no. Put it down now.",
+        "subtitle_translated": "不，不，不。現在放下它。",
+        "size_bytes": 105824
+      },
+      {
+        "index": 53,
+        "timestamp": 81.43950000000001,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0053_81.44s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0053_81.44s.jpg",
+        "subtitle": "No, no, no. Put it down now.",
+        "subtitle_translated": "不，不，不。現在放下它。",
+        "size_bytes": 101372
+      },
+      {
+        "index": 54,
+        "timestamp": 82.6395,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0054_82.64s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0054_82.64s.jpg",
+        "subtitle": "What?",
+        "subtitle_translated": "什麼？",
+        "size_bytes": 109403
+      },
+      {
+        "index": 55,
+        "timestamp": 83.7595,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0055_83.76s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0055_83.76s.jpg",
+        "subtitle": "Tell me I'm good.",
+        "subtitle_translated": "告訴我你很好。",
+        "size_bytes": 117251
+      },
+      {
+        "index": 56,
+        "timestamp": 86.619,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0056_86.62s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0056_86.62s.jpg",
+        "subtitle": "Nope. Put it down again.",
+        "subtitle_translated": "不行。再放下來。",
+        "size_bytes": 88535
+      },
+      {
+        "index": 57,
+        "timestamp": 87.459,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0057_87.46s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0057_87.46s.jpg",
+        "subtitle": "Nope. Put it down again.",
+        "subtitle_translated": "不行。再放下來。",
+        "size_bytes": 92272
+      },
+      {
+        "index": 58,
+        "timestamp": 90.75999999999999,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0058_90.76s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0058_90.76s.jpg",
+        "subtitle": "No.",
+        "subtitle_translated": "不。",
+        "size_bytes": 98237
+      },
+      {
+        "index": 59,
+        "timestamp": 91.68,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0059_91.68s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0059_91.68s.jpg",
+        "subtitle": "Put it down.",
+        "subtitle_translated": "放下它。",
+        "size_bytes": 100441
+      },
+      {
+        "index": 60,
+        "timestamp": 92.8395,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0060_92.84s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0060_92.84s.jpg",
+        "subtitle": "Put it down. Just put it down. It's not",
+        "subtitle_translated": "放下它。只是放下它。它不是",
+        "size_bytes": 109260
+      },
+      {
+        "index": 61,
+        "timestamp": 94.12,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0061_94.12s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0061_94.12s.jpg",
+        "subtitle": "Put it down. Just put it down. It's not",
+        "subtitle_translated": "放下吧。 把它放下。 這不是",
+        "size_bytes": 98131
+      },
+      {
+        "index": 62,
+        "timestamp": 95.23949999999999,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0062_95.24s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0062_95.24s.jpg",
+        "subtitle": "yours, man. Put it",
+        "subtitle_translated": "你的東西，哥。 放下",
+        "size_bytes": 110096
+      },
+      {
+        "index": 63,
+        "timestamp": 96.1995,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0063_96.20s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0063_96.20s.jpg",
+        "subtitle": "What?",
+        "subtitle_translated": "什麼？",
+        "size_bytes": 74929
+      },
+      {
+        "index": 64,
+        "timestamp": 96.64,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0064_96.64s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0064_96.64s.jpg",
+        "subtitle": "What?",
+        "subtitle_translated": "什麼？",
+        "size_bytes": 99547
+      },
+      {
+        "index": 65,
+        "timestamp": 98.51950000000001,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0065_98.52s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0065_98.52s.jpg",
+        "subtitle": "Take it.",
+        "subtitle_translated": "拿去。",
+        "size_bytes": 83041
+      },
+      {
+        "index": 66,
+        "timestamp": 99.48,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0066_99.48s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0066_99.48s.jpg",
+        "subtitle": "Take it.",
+        "subtitle_translated": "拿去。",
+        "size_bytes": 105708
+      },
+      {
+        "index": 67,
+        "timestamp": 101.8395,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0067_101.84s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0067_101.84s.jpg",
+        "subtitle": "Yeah. Come on then. Touch me then. [ __ ]",
+        "subtitle_translated": "對啊。 敢碰我嗎？ [ __ ]",
+        "size_bytes": 76331
+      },
+      {
+        "index": 68,
+        "timestamp": 103.2,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0068_103.20s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0068_103.20s.jpg",
+        "subtitle": "Yeah. Come on then. Touch me then. [ __ ]",
+        "subtitle_translated": "對啊。 敢碰我嗎？ [ __ ]",
+        "size_bytes": 100576
+      },
+      {
+        "index": 69,
+        "timestamp": 105.119,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0069_105.12s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0069_105.12s.jpg",
+        "subtitle": "Come on. Touch me, bro.",
+        "subtitle_translated": "拿去。 碰我一下，兄弟。",
+        "size_bytes": 95713
+      },
+      {
+        "index": 70,
+        "timestamp": 106.68,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0070_106.68s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0070_106.68s.jpg",
+        "subtitle": "Come on. Touch me, bro.",
+        "subtitle_translated": "拿去。 碰我一下，兄弟。",
+        "size_bytes": 81428
+      },
+      {
+        "index": 71,
+        "timestamp": 108.119,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0071_108.12s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0071_108.12s.jpg",
+        "subtitle": "Come on, bro.",
+        "subtitle_translated": "拿去，兄弟。",
+        "size_bytes": 82419
+      },
+      {
+        "index": 72,
+        "timestamp": 110.64,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0072_110.64s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0072_110.64s.jpg",
+        "subtitle": "Put it down.",
+        "subtitle_translated": "放下吧。",
+        "size_bytes": 82894
+      },
+      {
+        "index": 73,
+        "timestamp": 111.439,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0073_111.44s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0073_111.44s.jpg",
+        "subtitle": "Put it down.",
+        "subtitle_translated": "放下吧。",
+        "size_bytes": 81601
+      },
+      {
+        "index": 74,
+        "timestamp": 113.71950000000001,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0074_113.72s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0074_113.72s.jpg",
+        "subtitle": "Put it down.",
+        "subtitle_translated": "放下吧。",
+        "size_bytes": 98546
+      },
+      {
+        "index": 75,
+        "timestamp": 115.0795,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0075_115.08s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0075_115.08s.jpg",
+        "subtitle": "Put it down, bro. Put it down, man.",
+        "subtitle_translated": "放下，兄弟。 放下，朋友。",
+        "size_bytes": 110390
+      },
+      {
+        "index": 76,
+        "timestamp": 115.959,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0076_115.96s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0076_115.96s.jpg",
+        "subtitle": "Put it down, bro. Put it down, man.",
+        "subtitle_translated": "放下，兄弟。 放下，朋友。",
+        "size_bytes": 106102
+      },
+      {
+        "index": 77,
+        "timestamp": 118.8,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0077_118.80s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0077_118.80s.jpg",
+        "subtitle": "Take it off.",
+        "subtitle_translated": "脫掉。",
+        "size_bytes": 78303
+      },
+      {
+        "index": 78,
+        "timestamp": 119.439,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0078_119.44s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0078_119.44s.jpg",
+        "subtitle": "Take it off.",
+        "subtitle_translated": "脫掉。",
+        "size_bytes": 90527
+      },
+      {
+        "index": 79,
+        "timestamp": 122.24,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0079_122.24s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0079_122.24s.jpg",
+        "subtitle": "You take it off yourself.",
+        "subtitle_translated": "你自己脫掉。",
+        "size_bytes": 111025
+      },
+      {
+        "index": 80,
+        "timestamp": 122.9995,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0080_123.00s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0080_123.00s.jpg",
+        "subtitle": "You take it off yourself.",
+        "subtitle_translated": "你自己脫掉。",
+        "size_bytes": 98660
+      },
+      {
+        "index": 81,
+        "timestamp": 125.24,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0081_125.24s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0081_125.24s.jpg",
+        "subtitle": "Can you take it off?",
+        "subtitle_translated": "你能把它脫下來嗎？",
+        "size_bytes": 98414
+      },
+      {
+        "index": 82,
+        "timestamp": 126.9195,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0082_126.92s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0082_126.92s.jpg",
+        "subtitle": "Take it off. Help me.",
+        "subtitle_translated": "脫下來。幫我一下。",
+        "size_bytes": 99510
+      },
+      {
+        "index": 83,
+        "timestamp": 128.48000000000002,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0083_128.48s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0083_128.48s.jpg",
+        "subtitle": "Take it off. Help me.",
+        "subtitle_translated": "脫下來。幫我一下。",
+        "size_bytes": 95736
+      },
+      {
+        "index": 84,
+        "timestamp": 130.6395,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0084_130.64s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0084_130.64s.jpg",
+        "subtitle": "Okay.",
+        "subtitle_translated": "好。",
+        "size_bytes": 98605
+      },
+      {
+        "index": 85,
+        "timestamp": 132.08,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0085_132.08s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0085_132.08s.jpg",
+        "subtitle": "Just call the Just call the Let me call",
+        "subtitle_translated": "打電話。讓我打電話。",
+        "size_bytes": 107380
+      },
+      {
+        "index": 86,
+        "timestamp": 133.9995,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0086_134.00s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0086_134.00s.jpg",
+        "subtitle": "Just call the Just call the Let me call",
+        "subtitle_translated": "打電話。讓我打電話。",
+        "size_bytes": 77565
+      },
+      {
+        "index": 87,
+        "timestamp": 137.22000000000003,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0087_137.22s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0087_137.22s.jpg",
+        "subtitle": "the police. I got their photograph. No,",
+        "subtitle_translated": "報警。我有他們的照片。不，",
+        "size_bytes": 112461
+      },
+      {
+        "index": 88,
+        "timestamp": 138.3395,
+        "path": "storage\\frames\\_Eq5ndYh3vc_frame_0088_138.34s.jpg",
+        "filename": "_Eq5ndYh3vc_frame_0088_138.34s.jpg",
+        "subtitle": "the police. I got their photograph. No,",
+        "subtitle_translated": "報警。我有他們的照片。不，",
+        "size_bytes": 59717
+      }
+    ],
+    "subtitles": {
+      "en": "storage\\subtitles\\_Eq5ndYh3vc.en-orig.srt"
+    },
+    "processing_time": 87.95671844482422,
+    "ai_outline": "## YouTube 影片分析：英國中東裔屁孩騷擾華人店主，華裔客人霸氣出手讓屁孩秒孬掉 (中文字幕)\n\n**1. 影片摘要**\n\n這段影片記錄了在英國一家商店發生的衝突，一群中東裔少年不斷騷擾華人店主，甚至試圖偷竊商品。一名華裔客人挺身而出，用強勢的態度制止了少年的行為，讓他們瞬間低頭。影片的後續發展及少年們的下場，在博主提供的鏈結中可以得知。\n\n**2. 關鍵重點**\n\n* **騷擾行為：** 一群中東裔少年不斷對店主進行言語和肢體上的騷擾，試圖挑釁。\n* **試圖偷竊：** 少年們試圖偷取商店內的商品，顯露出不當行為。\n* **華裔客人挺身而出：** 一名華裔客人迅速介入，用強勢的態度制止了少年的行為。\n* **少年們的退縮：** 在華裔客人的威懾下，原本囂張的少年們瞬間變得畏懼，並放棄了偷竊行為。\n* **店主威脅報警：** 店主威脅要報警，進一步讓少年們知難而退。\n\n**3. 詳細大綱**\n\n以下大綱基於影片中提供的字幕片段，盡可能地按照時間順序排列，並以主題和簡短說明呈現。由於影片本身沒有分段標示，因此大綱會將事件的發展分段描述：\n\n**I. 衝突開端 (0:00 - 0:30)**\n\n* **主題：騷擾與挑釁**\n    * 描述：一群中東裔少年不斷對店主進行言語上的挑釁，並要求店主停止“彈球”的動作，製造衝突。\n    * 字幕關鍵詞： \"Excuse me. He's saying don't touch the ball, man.\", \"Don't touch it then.\", \"Come on. Get out.\"\n\n**II. 試圖偷竊 (0:30 - 1:30)**\n\n* **主題：少年們的盜竊行為**\n    * 描述：少年們開始試圖偷取商店內的商品，並與店主爭執，試圖隱瞞其行為。\n    * 字幕關鍵詞： \"Put it down now.\", \"He's stealing it.\", \"You're not allowed to.\", \"Put it back.\"\n\n**III. 華裔客人介入 (1:30 - 2:30)**\n\n* **主題：客人挺身而出，制止盜竊**\n    * 描述：一名華裔客人迅速介入，用強勢的語氣和肢體語言制止少年的盜竊行為，讓他們瞬間低頭。\n    * 字幕關鍵詞： 此段字幕較為模糊，但可推斷客人在此段發揮重要作用，制止少年的行為。\n\n**IV. 店主威脅報警 (2:30 - 3:00)**\n\n* **主題：店主以報警警告少年**\n    * 描述：店主威脅要報警，讓少年們更加慌張，最終放棄了偷竊行為。\n    * 字幕關鍵詞： \"Just call the Just call the Let me call the police.\", \"I'm actually going to call the police.\"\n\n**V. 爭執與道歉 (3:00 - 3:30)**\n\n* **主題：少年們的退縮與店主的態度**\n    * 描述：少年們在面對店主和客人的強勢態度後，變得畏懼，並開始爭執，試圖掩飾自己的行為。\n    * 字幕關鍵詞： 此段字幕描述了少年們在被制止後的反應，以及店主和客人的態度。\n\n**注意：**\n\n* 本大綱基於影片提供的字幕片段，由於缺乏完整的影片內容，因此可能存在細節上的偏差。\n* 博主提供的鏈結中可能包含影片的後續發展和少年們的下場，建議查閱以獲得更完整的資訊。\n* 影片內容涉及族群和地域的描述，請在觀看時保持客觀和理性的態度。",
+    "translated_subtitle": "storage\\subtitles\\_Eq5ndYh3vc.zh-TW.translated.srt",
+    "ai_provider": "ollama"
+  }
+}

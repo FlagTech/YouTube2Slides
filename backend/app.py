@@ -369,7 +369,8 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
                 message="優化自動字幕..."
             )
             try:
-                optimized_path = subtitle_optimizer.optimize_srt_file(subtitle_path)
+                # Pass language code to optimizer for language-specific handling
+                optimized_path = subtitle_optimizer.optimize_srt_file(subtitle_path, language=primary_lang)
                 stats = subtitle_optimizer.get_optimization_stats(subtitle_path)
 
                 if stats['reduction_percentage'] > 30:

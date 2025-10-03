@@ -75,3 +75,7 @@ logs/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Git Bash artifacts (created when running .bat files in Git Bash)
+nul
+nul.*

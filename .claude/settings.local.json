@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv run:*)",
+      "Bash(npm install)",
+      "Bash(npm start)",
+      "Bash(where:*)",
+      "Bash(python:*)",
+      "Bash(uv pip:*)",
+      "Bash(uv:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(ffmpeg:*)",
+      "Bash(setup_and_start.bat)",
+      "Bash(cmd /c:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(curl:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

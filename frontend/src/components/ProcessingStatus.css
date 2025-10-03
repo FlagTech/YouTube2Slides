@@ -3,7 +3,7 @@
   padding: 3rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
+  max-width: 900px;
   width: 100%;
   text-align: center;
 }
@@ -172,14 +172,151 @@
   box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.4);
 }
 
+/* 當前步驟顯示 */
+.current-step {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-left: 4px solid #667eea;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.current-step-label {
+  font-size: 0.75rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.current-step-name {
+  font-size: 1.25rem;
+  color: #667eea;
+  font-weight: 700;
+  animation: fade-in 0.3s ease-in;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 時間軸容器 */
+.timeline-container {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.timeline-container h3 {
+  font-size: 1.1rem;
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.timeline {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.timeline-event {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  background: white;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.timeline-event:hover {
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-time {
+  color: #718096;
+  font-size: 0.85rem;
+  min-width: 80px;
+  font-family: monospace;
+}
+
+.timeline-step {
+  color: #667eea;
+  font-weight: 600;
+  min-width: 50px;
+}
+
+.timeline-message {
+  color: #4a5568;
+  flex: 1;
+}
+
+/* 捲軸美化 */
+.timeline::-webkit-scrollbar {
+  width: 8px;
+}
+
+.timeline::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+.timeline::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+.timeline::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
 @media (max-width: 600px) {
   .processing-status {
     padding: 2rem;
   }
 
-  .timeline-item__header {
+  .step-indicators {
+    padding: 1rem;
+    gap: 0.25rem;
+  }
+
+  .step-indicator {
+    min-width: 60px;
+  }
+
+  .step-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .step-label {
+    font-size: 0.65rem;
+  }
+
+  .timeline-event {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.25rem;
+  }
+
+  .timeline-time {
+    min-width: auto;
   }
 }
