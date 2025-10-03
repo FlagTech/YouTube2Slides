@@ -1,0 +1,4 @@
+- 我使用 uv 管理 Python 環境：
+- 如果專案尚未建立虛擬環境，請使用 uv init 初始化環境
+- 如果有 requiremwnts.txt 檔案，請使用 uv add 加入需要的套件
+- 如果要執行 python 程式，使用 uv run 執行

@@ -1,0 +1,349 @@
+# YouTube to Readable Slides
+
+將 YouTube 影片轉換為靜態閱讀版本（投影片）的 Web 應用程式。
+
+## 功能特色
+
+### 核心功能
+- ✅ **YouTube 影片處理**
+  - 支援多種 YouTube URL 格式
+  - 下載影片並提取資訊（標題、時長、頻道、縮圖等）
+  - 可調整影片畫質（360p/480p/720p）
+
+- ✅ **字幕處理**
+  - 支援多語言字幕（繁體中文、簡體中文、英文、日文、韓文等）
+  - 自動翻譯功能
+  - 時間軸同步處理
+  - SRT 格式解析與匯出
+
+- ✅ **投影片生成**
+  - 根據字幕變換自動截取關鍵幀
+  - 可調整截圖間隔時間
+  - 圖片壓縮與最佳化
+  - 批次處理多個幀
+
+- ✅ **互動式瀏覽**
+  - 投影片檢視器
+  - 鍵盤導航支援（方向鍵）
+  - 縮圖預覽列表
+  - 即時字幕顯示
+
+## 技術架構
+
+### 後端
+- **框架**: FastAPI (Python)
+- **影片處理**: yt-dlp, ffmpeg-python
+- **字幕處理**: 自訂 SRT 解析器
+- **翻譯**: deep-translator (Google Translate)
+- **圖片處理**: Pillow
+- **非同步任務**: Background Tasks
+
+### 前端
+- **框架**: React 18
+- **HTTP 客戶端**: Axios
+- **樣式**: CSS3 (漸層、動畫、響應式設計)
+
+## 快速啟動
+
+### 🚀 完全自動安裝與啟動（推薦新手）
+
+**不需要安裝任何東西！** 腳本會自動安裝所有需要的工具。
+
+**Windows 用戶:**
+```bash
+# 雙擊執行（會自動安裝 Node.js、ffmpeg、uv 等工具）
+setup_and_start.bat
+
+# 或使用 Python 腳本
+python setup_and_start.py
+```
+
+**Linux/macOS 用戶:**
+```bash
+python3 setup_and_start.py
+```
+
+### 一鍵啟動（已安裝依賴的用戶）
+
+**Windows 用戶:**
+```bash
+# 方法 1: 雙擊批次檔
+start.bat
+
+# 方法 2: 使用 Python 腳本
+python start.py
+```
+
+**Linux/macOS 用戶:**
+```bash
+# 方法 1: 使用 Shell 腳本
+chmod +x start.sh  # 首次執行需要
+./start.sh
+
+# 方法 2: 使用 Python 腳本
+python3 start.py
+```
+
+啟動腳本會自動：
+- 檢查系統依賴
+- 初始化虛擬環境（首次運行）
+- 安裝前端依賴（首次運行）
+- 同時啟動前端和後端服務
+
+服務啟動後可訪問：
+- **前端**: http://localhost:3000
+- **後端**: http://localhost:8000
+- **API 文檔**: http://localhost:8000/docs
+
+詳細啟動說明請參考 [README_STARTUP.md](README_STARTUP.md)
+
+---
+
+## 手動安裝與設定
+
+### 前置需求
+- Python 3.9+
+- Node.js 16+
+- uv (Python 套件管理工具)
+- ffmpeg（必須安裝並加入系統 PATH）
+
+### 安裝 ffmpeg
+
+**Windows:**
+```bash
+# 使用 Chocolatey
+choco install ffmpeg
+
+# 或下載二進位檔案
+# https://www.gyan.dev/ffmpeg/builds/
+```
+
+**macOS:**
+```bash
+brew install ffmpeg
+```
+
+**Linux:**
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+### 安裝 uv
+
+**Windows/macOS/Linux:**
+```bash
+# 使用官方安裝腳本
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 或使用 pip
+pip install uv
+```
+
+### 後端安裝
+
+1. 進入後端目錄並同步依賴：
+```bash
+cd backend
+uv sync
+```
+
+2. 啟動後端伺服器：
+```bash
+uv run python app.py
+```
+
+後端將在 `http://localhost:8000` 啟動
+
+### 前端安裝
+
+1. 進入前端目錄並安裝依賴：
+```bash
+cd frontend
+npm install
+```
+
+2. 啟動開發伺服器：
+```bash
+npm start
+```
+
+前端將在 `http://localhost:3000` 啟動
+
+## 使用方式
+
+1. **開啟應用程式**
+   - 瀏覽器訪問 `http://localhost:3000`
+
+2. **輸入 YouTube URL**
+   - 貼上 YouTube 影片連結
+   - 選擇影片畫質（360p/480p/720p）
+
+3. **設定字幕選項**
+   - 選擇要下載的字幕語言
+   - （可選）選擇翻譯目標語言
+   - 調整截圖間隔時間（秒）
+
+4. **處理影片**
+   - 點擊「Process Video」開始處理
+   - 等待處理完成（會顯示進度條）
+
+5. **瀏覽投影片**
+   - 使用左右箭頭鍵或按鈕導航
+   - 點擊縮圖快速跳轉
+   - 閱讀每張投影片的字幕
+
+## API 端點
+
+### 影片資訊
+```http
+POST /api/video/info
+Content-Type: application/json
+
+{
+  "url": "https://www.youtube.com/watch?v=VIDEO_ID"
+}
+```
+
+### 處理影片
+```http
+POST /api/video/process
+Content-Type: application/json
+
+{
+  "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+  "quality": "720",
+  "subtitle_languages": ["zh-TW", "en"],
+  "translate_to": "zh-TW",
+  "frame_threshold": 2.0
+}
+```
+
+### 查詢任務狀態
+```http
+GET /api/jobs/{job_id}
+```
+
+### 翻譯文字
+```http
+POST /api/translate
+Content-Type: application/json
+
+{
+  "text": "Hello world",
+  "source_lang": "en",
+  "target_lang": "zh-TW"
+}
+```
+
+### 獲取支援語言
+```http
+GET /api/languages
+```
+
+## 專案結構
+
+```
+VIDEO_TO_READABLE/
+├── backend/
+│   ├── app.py                 # FastAPI 主應用
+│   ├── requirements.txt       # Python 依賴
+│   ├── services/
+│   │   ├── youtube.py         # YouTube 下載服務
+│   │   ├── subtitle.py        # 字幕處理服務
+│   │   ├── frame_extractor.py # 影格提取服務
+│   │   └── translator.py      # 翻譯服務
+│   ├── models/
+│   │   └── schemas.py         # Pydantic 資料模型
+│   └── utils/                 # 工具函數
+├── frontend/
+│   ├── public/
+│   │   └── index.html
+│   ├── src/
+│   │   ├── App.js             # 主應用組件
+│   │   ├── components/        # React 組件
+│   │   │   ├── VideoInput.js  # 影片輸入表單
+│   │   │   ├── ProcessingStatus.js  # 處理狀態
+│   │   │   └── SlideViewer.js # 投影片檢視器
+│   │   └── api/
+│   │       └── api.js         # API 客戶端
+│   └── package.json
+├── storage/                   # 儲存目錄
+│   ├── videos/                # 下載的影片
+│   ├── frames/                # 擷取的影格
+│   └── subtitles/             # 字幕檔案
+└── README.md
+```
+
+## 環境變數
+
+### 前端 (.env)
+```env
+REACT_APP_API_URL=http://localhost:8000
+```
+
+### 後端
+無需額外環境變數設定（使用預設值）
+
+## 效能最佳化
+
+1. **影片畫質選擇**
+   - 720p: 高畫質，檔案較大，處理時間較長
+   - 480p: 平衡畫質與效能（推薦）
+   - 360p: 快速處理，檔案較小
+
+2. **截圖間隔**
+   - 2 秒: 預設值，適合大多數影片
+   - 3-5 秒: 減少投影片數量，加快處理
+   - 1 秒: 更詳細的投影片，處理時間較長
+
+3. **圖片壓縮**
+   - 自動壓縮為 JPEG 格式
+   - 預設品質: 85%
+   - 自動調整尺寸至 1280px 寬度
+
+## 疑難排解
+
+### ffmpeg 未找到
+```
+Error: ffmpeg not found
+```
+**解決方案**: 安裝 ffmpeg 並確保加入系統 PATH
+
+### 字幕不可用
+```
+Error: No subtitles available
+```
+**解決方案**:
+- 確認影片有字幕
+- 嘗試不同的語言選項
+- 檢查是否有自動生成字幕
+
+### CORS 錯誤
+```
+Access to fetch has been blocked by CORS policy
+```
+**解決方案**: 確認後端 CORS 設定正確，或在生產環境中設定具體的 origin
+
+## 未來改進
+
+- [ ] OCR 文字辨識（從投影片提取額外文字）
+- [ ] AI 自動摘要（整合 OpenAI/Claude API）
+- [ ] 場景變化偵測（更智能的截圖時機）
+- [ ] 匯出 PDF/PPT 格式
+- [ ] 批次處理多個影片
+- [ ] 使用者帳號系統與分享功能
+- [ ] Redis 快取與 Celery 任務佇列
+- [ ] Docker 容器化部署
+
+## 授權
+
+MIT License
+
+## 貢獻
+
+歡迎提交 Issue 和 Pull Request！
+
+## 聯絡
+
+如有問題或建議，請開啟 GitHub Issue。

@@ -1,0 +1,248 @@
+.video-input {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+}
+
+.header-with-clear {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.header-with-clear h2 {
+  color: #667eea;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.clear-settings-btn {
+  background: #ff9800;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(255, 152, 0, 0.3);
+}
+
+.clear-settings-btn:hover {
+  background: #f57c00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4);
+}
+
+.video-input h2 {
+  color: #667eea;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.form-group small {
+  display: block;
+  color: #999;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.language-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  cursor: pointer;
+}
+
+.submit-btn {
+  width: 100%;
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+}
+
+.submit-btn:hover {
+  background: #5568d3;
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+.info-box {
+  background: #e7f3ff;
+  border-left: 4px solid #667eea;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.info-box p {
+  margin: 0;
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.screenshot-settings {
+  background: linear-gradient(135deg, #fff5e6 0%, #ffe0b3 100%);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid #ff9800;
+}
+
+.screenshot-settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.screenshot-settings-header:hover {
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+.screenshot-settings h3 {
+  color: #f57c00;
+  margin: 0;
+  font-size: 1.1rem;
+  flex: 1;
+}
+
+.expand-icon {
+  color: #f57c00;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: transform 0.3s;
+}
+
+.screenshot-settings-content {
+  padding-top: 1rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-config-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid #667eea;
+}
+
+.api-key-input {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+.help-text {
+  color: #666 !important;
+  font-size: 0.8rem !important;
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+.settings-saved-indicator {
+  background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .header-with-clear {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .header-with-clear h2 {
+    text-align: center;
+  }
+
+  .clear-settings-btn {
+    width: 100%;
+  }
+}

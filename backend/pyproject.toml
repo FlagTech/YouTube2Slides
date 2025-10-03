@@ -1,0 +1,23 @@
+[project]
+name = "youtube-to-readable-backend"
+version = "1.0.0"
+description = "YouTube to Readable Slides - Backend API"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi>=0.104.1",
+    "uvicorn[standard]>=0.24.0",
+    "yt-dlp>=2023.11.16",
+    "ffmpeg-python>=0.2.0",
+    "pillow>=10.1.0",
+    "deep-translator>=1.11.4",
+    "python-multipart>=0.0.6",
+    "aiofiles>=23.2.1",
+    "pydantic>=2.5.0",
+    "python-dotenv>=1.0.0",
+    "celery>=5.3.4",
+    "redis>=5.0.1",
+    "sqlalchemy>=2.0.23",
+    "openai>=1.12.0",
+    "anthropic>=0.18.0",
+    "google-generativeai>=0.3.0",
+]
