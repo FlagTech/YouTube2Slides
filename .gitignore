@@ -51,17 +51,16 @@ coverage/
 .nyc_output
 
 # Storage (generated files)
-storage/videos/*.mp4
-storage/frames/*.jpg
-storage/frames/*.png
-storage/subtitles/*.srt
-storage/temp/*
+backend/storage/videos/**
+backend/storage/frames/**
+backend/storage/subtitles/**
+backend/storage/temp/**
 
 # Keep directories but ignore contents
-!storage/videos/.gitkeep
-!storage/frames/.gitkeep
-!storage/subtitles/.gitkeep
-!storage/temp/.gitkeep
+!backend/storage/videos/.gitkeep
+!backend/storage/frames/.gitkeep
+!backend/storage/subtitles/.gitkeep
+!backend/storage/temp/.gitkeep
 
 # Logs
 *.log
