@@ -66,6 +66,35 @@ Translated text ({target_name}):"""
 
         return prompt
 
+    def _calculate_optimal_batch_size(self, texts: List[str]) -> int:
+        """
+        Calculate optimal batch size based on text length
+
+        Rationale:
+        - Longer texts consume more tokens
+        - Smaller batches for long texts prevent context window overflow
+        - Larger batches for short texts improve efficiency
+        """
+        if not texts:
+            return 20
+
+        # Calculate average text length
+        avg_length = sum(len(text) for text in texts) / len(texts)
+
+        # Adaptive batch sizing
+        if avg_length < 30:
+            # Short subtitles (e.g., "Yes", "Hello")
+            return 30
+        elif avg_length < 60:
+            # Medium subtitles (typical)
+            return 20
+        elif avg_length < 100:
+            # Long subtitles
+            return 15
+        else:
+            # Very long subtitles (paragraphs)
+            return 10
+
     def translate_batch(
         self,
         texts: List[str],
@@ -74,7 +103,7 @@ Translated text ({target_name}):"""
         provider: AIProvider,
         model: Optional[str] = None,
         api_key: Optional[str] = None,
-        batch_size: int = 20
+        batch_size: int = None
     ) -> List[str]:
         """
         Translate a batch of texts using AI
@@ -86,7 +115,7 @@ Translated text ({target_name}):"""
             provider: AI provider to use
             model: Specific model name
             api_key: API key (optional, will use env var if not provided)
-            batch_size: Number of texts per batch
+            batch_size: Number of texts per batch (auto-calculated if None)
 
         Returns:
             List of translated texts
@@ -94,11 +123,18 @@ Translated text ({target_name}):"""
         if not texts:
             return []
 
+        # Auto-calculate optimal batch size if not provided
+        if batch_size is None:
+            batch_size = self._calculate_optimal_batch_size(texts)
+            print(f"[AI Translator] Auto-calculated batch size: {batch_size} (avg text length: {sum(len(t) for t in texts) / len(texts):.1f})")
+
         all_translations = []
+        total_batches = (len(texts) + batch_size - 1) // batch_size
 
         # Process in batches to avoid token limits
-        for i in range(0, len(texts), batch_size):
+        for batch_num, i in enumerate(range(0, len(texts), batch_size), 1):
             batch = texts[i:i + batch_size]
+            print(f"[AI Translator] Processing batch {batch_num}/{total_batches} ({len(batch)} items)")
 
             try:
                 if provider == AIProvider.OPENAI:
@@ -120,13 +156,29 @@ Translated text ({target_name}):"""
                 else:
                     raise ValueError(f"Unsupported provider: {provider}")
 
+                # Verify translation count matches
+                if len(translated_batch) != len(batch):
+                    print(f"[WARNING] Batch {batch_num}: Expected {len(batch)} translations, got {len(translated_batch)}")
+                    print(f"[WARNING] Original batch: {batch[:3]}...")
+                    print(f"[WARNING] Translated batch: {translated_batch[:3] if translated_batch else 'EMPTY'}...")
+
+                    # Pad with original text if missing translations
+                    while len(translated_batch) < len(batch):
+                        missing_index = len(translated_batch)
+                        print(f"[WARNING] Missing translation at index {missing_index}, using original: '{batch[missing_index]}'")
+                        translated_batch.append(batch[missing_index])
+
                 all_translations.extend(translated_batch)
+                print(f"[AI Translator] Batch {batch_num}/{total_batches} completed: {len(translated_batch)} translations")
 
             except Exception as e:
-                print(f"Translation batch {i//batch_size + 1} failed: {str(e)}")
+                print(f"[ERROR] Translation batch {batch_num}/{total_batches} failed: {str(e)}")
+                import traceback
+                traceback.print_exc()
                 # Fallback: return original text if translation fails
                 all_translations.extend(batch)
 
+        print(f"[AI Translator] Translation complete: {len(all_translations)}/{len(texts)} items")
         return all_translations
 
     def _parse_translation_response(self, response_text: str, expected_count: int) -> List[str]:
@@ -134,6 +186,10 @@ Translated text ({target_name}):"""
         lines = response_text.strip().split('\n')
         translations = []
 
+        print(f"[Parser] Raw response length: {len(response_text)} chars, {len(lines)} lines")
+        print(f"[Parser] Expected {expected_count} translations")
+
+        # Method 1: Try to extract numbered format [0], [1], etc.
         for line in lines:
             line = line.strip()
             # Look for numbered format [0], [1], etc.
@@ -142,13 +198,57 @@ Translated text ({target_name}):"""
                 try:
                     bracket_end = line.index(']')
                     text = line[bracket_end + 1:].strip()
-                    translations.append(text)
+                    if text:  # Only add non-empty translations
+                        translations.append(text)
                 except:
                     pass
 
-        # If parsing failed, try splitting by newlines
+        print(f"[Parser] Method 1 (numbered): Found {len(translations)} translations")
+
+        # Method 2: If parsing failed or count mismatch, try alternative parsing
         if len(translations) != expected_count:
-            translations = [line.strip() for line in lines if line.strip() and not line.startswith('[')]
+            print(f"[Parser] Count mismatch, trying alternative parsing...")
+
+            # Try to match by pattern more flexibly
+            import re
+            pattern = r'\[\s*(\d+)\s*\]\s*(.+?)(?=\n\[|$)'
+            matches = re.findall(pattern, response_text, re.DOTALL)
+
+            if matches:
+                # Sort by index to ensure order
+                matches.sort(key=lambda x: int(x[0]))
+                alternative_translations = [match[1].strip() for match in matches]
+                print(f"[Parser] Method 2 (regex): Found {len(alternative_translations)} translations")
+
+                if len(alternative_translations) == expected_count:
+                    translations = alternative_translations
+                elif len(alternative_translations) > len(translations):
+                    # Use regex result if it's better
+                    translations = alternative_translations
+
+        # Method 3: Last resort - split by lines and filter
+        if len(translations) != expected_count:
+            print(f"[Parser] Still mismatch, trying line-by-line parsing...")
+            line_translations = []
+            for line in lines:
+                line = line.strip()
+                # Skip empty lines and common AI response prefixes
+                if not line or line.startswith(('Translation', 'Translated', 'Here', 'Sure', 'Note:')):
+                    continue
+                # Remove numbering if present
+                line = re.sub(r'^\[\d+\]\s*', '', line)
+                if line:
+                    line_translations.append(line)
+
+            print(f"[Parser] Method 3 (lines): Found {len(line_translations)} translations")
+
+            if len(line_translations) == expected_count:
+                translations = line_translations
+
+        # Final verification
+        if len(translations) != expected_count:
+            print(f"[WARNING] Final count mismatch: expected {expected_count}, got {len(translations)}")
+            print(f"[WARNING] First 5 lines of response:\n{chr(10).join(lines[:5])}")
 
         return translations
 

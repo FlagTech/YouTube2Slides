@@ -467,8 +467,7 @@ def process_video_task(job_id: str, request: ProcessVideoRequest):
                         target_lang=request.translate_to,
                         provider=request.ai_provider,
                         model=request.ai_model,
-                        api_key=request.api_key,
-                        batch_size=20
+                        api_key=request.api_key
                     )
                 except Exception as e:
                     print(f"AI translation failed, falling back to Google Translate: {str(e)}")

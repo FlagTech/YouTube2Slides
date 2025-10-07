@@ -306,7 +306,7 @@ function VideoInput({ onSubmit }) {
               checked={generateOutline}
               onChange={(e) => setGenerateOutline(e.target.checked)}
             />
-            <span>生成 AI 影片大綱</span>
+            <span>AI 翻譯 & 生成 AI 影片大綱</span>
           </label>
         </div>
 
