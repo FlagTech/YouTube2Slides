@@ -5,35 +5,49 @@ import {
   clearHistory as clearHistoryStorage,
   deleteHistoryItem as deleteHistoryItemStorage,
   syncHistoryFromBackend,
-  shouldSync
+  shouldSync,
+  getFolders,
+  createFolder,
+  deleteFolder,
+  renameFolder,
+  toggleFolderExpanded,
+  moveHistoryToFolder,
+  reorderHistory
 } from '../utils/historyManager';
 import { deleteVideo } from '../api/api';
 
 function Sidebar({ onSelectHistory, onGoHome, currentJobId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [history, setHistory] = useState([]);
+  const [folders, setFolders] = useState([]);
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [dragOverItem, setDragOverItem] = useState(null);
+  const [editingFolderId, setEditingFolderId] = useState(null);
+  const [editingFolderName, setEditingFolderName] = useState('');
 
   useEffect(() => {
-    // Load history from localStorage on mount
-    const loadHistory = () => {
+    // Load history and folders from localStorage on mount
+    const loadData = () => {
       const loadedHistory = getHistory();
+      const loadedFolders = getFolders();
       setHistory(loadedHistory);
+      setFolders(loadedFolders);
     };
 
     // Initial load
-    loadHistory();
+    loadData();
 
     // Sync from backend if needed
     const syncIfNeeded = async () => {
       if (shouldSync()) {
         await syncHistoryFromBackend();
-        loadHistory(); // Reload after sync
+        loadData(); // Reload after sync
       }
     };
     syncIfNeeded();
 
     // Set up an interval to check for updates
-    const interval = setInterval(loadHistory, 1000);
+    const interval = setInterval(loadData, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -148,6 +162,115 @@ function Sidebar({ onSelectHistory, onGoHome, currentJobId }) {
     return date.toLocaleDateString('zh-TW');
   };
 
+  // Folder management functions
+  const handleCreateFolder = () => {
+    const folderName = prompt('請輸入資料夾名稱：');
+    if (folderName && folderName.trim()) {
+      createFolder(folderName.trim());
+      setFolders(getFolders());
+    }
+  };
+
+  const handleDeleteFolder = (e, folderId) => {
+    e.stopPropagation();
+    const folder = folders.find(f => f.id === folderId);
+    if (window.confirm(`確定要刪除「${folder.name}」資料夾嗎？\n\n資料夾內的項目將移回未分類。`)) {
+      deleteFolder(folderId);
+      setFolders(getFolders());
+      setHistory(getHistory());
+    }
+  };
+
+  const handleRenameFolder = (folderId) => {
+    const folder = folders.find(f => f.id === folderId);
+    setEditingFolderId(folderId);
+    setEditingFolderName(folder.name);
+  };
+
+  const handleRenameSubmit = (folderId) => {
+    if (editingFolderName.trim()) {
+      renameFolder(folderId, editingFolderName.trim());
+      setFolders(getFolders());
+    }
+    setEditingFolderId(null);
+    setEditingFolderName('');
+  };
+
+  const handleToggleFolder = (folderId) => {
+    toggleFolderExpanded(folderId);
+    setFolders(getFolders());
+  };
+
+  // Drag and drop functions
+  const handleDragStart = (e, index) => {
+    setDraggedItem(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDragOverItem = (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (draggedItem !== null && draggedItem !== index) {
+      setDragOverItem(index);
+    }
+  };
+
+  const handleDragLeaveItem = (e) => {
+    e.preventDefault();
+    setDragOverItem(null);
+  };
+
+  const handleDropOnItem = (e, targetIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (draggedItem !== null && draggedItem !== targetIndex) {
+      // Check if both items are in the same folder
+      const currentHistory = getHistory();
+      const draggedFolderId = currentHistory[draggedItem]?.folderId;
+      const targetFolderId = currentHistory[targetIndex]?.folderId;
+
+      if (draggedFolderId === targetFolderId) {
+        // Same folder or both uncategorized - reorder
+        reorderHistory(draggedItem, targetIndex);
+        setHistory(getHistory());
+      }
+    }
+
+    setDraggedItem(null);
+    setDragOverItem(null);
+  };
+
+  const handleDropOnFolder = (e, folderId) => {
+    e.preventDefault();
+    if (draggedItem !== null) {
+      moveHistoryToFolder(draggedItem, folderId);
+      setHistory(getHistory());
+      setDraggedItem(null);
+      setDragOverItem(null);
+    }
+  };
+
+  const handleDropOnUncategorized = (e) => {
+    e.preventDefault();
+    if (draggedItem !== null) {
+      moveHistoryToFolder(draggedItem, null);
+      setHistory(getHistory());
+      setDraggedItem(null);
+      setDragOverItem(null);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setDraggedItem(null);
+    setDragOverItem(null);
+  };
+
   return (
     <>
       <button className="sidebar-toggle" onClick={toggleSidebar}>
@@ -168,39 +291,151 @@ function Sidebar({ onSelectHistory, onGoHome, currentJobId }) {
           <div className="history-section">
             <div className="history-header">
               <h3>📋 歷史記錄</h3>
-              {history.length > 0 && (
-                <button className="clear-all-btn" onClick={clearAllHistory}>
-                  清除全部
+              <div className="history-header-actions">
+                <button className="add-folder-btn" onClick={handleCreateFolder} title="新增資料夾">
+                  📁+
                 </button>
-              )}
+                {history.length > 0 && (
+                  <button className="clear-all-btn" onClick={clearAllHistory}>
+                    清除全部
+                  </button>
+                )}
+              </div>
             </div>
 
-            {history.length === 0 ? (
+            {history.length === 0 && folders.length === 0 ? (
               <p className="empty-message">尚無歷史記錄</p>
             ) : (
               <div className="history-list">
-                {history.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`history-item ${item.jobId === currentJobId ? 'active' : ''}`}
-                    onClick={() => handleSelectHistory(item)}
-                  >
-                    <div className="history-item-content">
-                      <div className="history-title">{item.title || '未命名影片'}</div>
-                      <div className="history-meta">
-                        <span className="history-time">{formatDate(item.timestamp)}</span>
-                        <span className="history-frames">{item.totalFrames} 張</span>
+                {/* Folders */}
+                {folders.map((folder) => (
+                  <div key={folder.id} className="folder-container">
+                    <div
+                      className="folder-header"
+                      onDragOver={handleDragOver}
+                      onDrop={(e) => handleDropOnFolder(e, folder.id)}
+                    >
+                      <div className="folder-header-left" onClick={() => handleToggleFolder(folder.id)}>
+                        <span className="folder-icon">{folder.expanded ? '📂' : '📁'}</span>
+                        {editingFolderId === folder.id ? (
+                          <input
+                            type="text"
+                            value={editingFolderName}
+                            onChange={(e) => setEditingFolderName(e.target.value)}
+                            onBlur={() => handleRenameSubmit(folder.id)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleRenameSubmit(folder.id)}
+                            onClick={(e) => e.stopPropagation()}
+                            autoFocus
+                            className="folder-name-input"
+                          />
+                        ) : (
+                          <span className="folder-name">{folder.name}</span>
+                        )}
+                        <span className="folder-count">
+                          ({history.filter(item => item.folderId === folder.id).length})
+                        </span>
+                      </div>
+                      <div className="folder-actions">
+                        <button
+                          className="rename-folder-btn"
+                          onClick={(e) => { e.stopPropagation(); handleRenameFolder(folder.id); }}
+                          title="重新命名"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          className="delete-folder-btn"
+                          onClick={(e) => handleDeleteFolder(e, folder.id)}
+                          title="刪除資料夾"
+                        >
+                          🗑️
+                        </button>
                       </div>
                     </div>
-                    <button
-                      className="delete-btn"
-                      onClick={(e) => deleteHistoryItem(e, index)}
-                      title="刪除"
-                    >
-                      🗑️
-                    </button>
+
+                    {folder.expanded && (
+                      <div className="folder-items">
+                        {history
+                          .map((item, index) => ({ item, index }))
+                          .filter(({ item }) => item.folderId === folder.id)
+                          .map(({ item, index }) => (
+                            <div
+                              key={index}
+                              draggable
+                              onDragStart={(e) => handleDragStart(e, index)}
+                              onDragOver={(e) => handleDragOverItem(e, index)}
+                              onDragLeave={handleDragLeaveItem}
+                              onDrop={(e) => handleDropOnItem(e, index)}
+                              onDragEnd={handleDragEnd}
+                              className={`history-item ${item.jobId === currentJobId ? 'active' : ''} ${draggedItem === index ? 'dragging' : ''} ${dragOverItem === index ? 'drag-over' : ''}`}
+                              onClick={() => handleSelectHistory(item)}
+                            >
+                              <div className="history-item-content">
+                                <div className="history-title">{item.title || '未命名影片'}</div>
+                                <div className="history-meta">
+                                  <span className="history-time">{formatDate(item.timestamp)}</span>
+                                  <span className="history-frames">{item.totalFrames} 張</span>
+                                </div>
+                              </div>
+                              <button
+                                className="delete-btn"
+                                onClick={(e) => deleteHistoryItem(e, index)}
+                                title="刪除"
+                              >
+                                🗑️
+                              </button>
+                            </div>
+                          ))}
+                      </div>
+                    )}
                   </div>
                 ))}
+
+                {/* Uncategorized items */}
+                {history.filter(item => !item.folderId).length > 0 && (
+                  <div className="uncategorized-section">
+                    <div
+                      className="uncategorized-header"
+                      onDragOver={handleDragOver}
+                      onDrop={handleDropOnUncategorized}
+                    >
+                      <span>📄 未分類</span>
+                    </div>
+                    <div className="uncategorized-items">
+                      {history
+                        .map((item, index) => ({ item, index }))
+                        .filter(({ item }) => !item.folderId)
+                        .map(({ item, index }) => (
+                          <div
+                            key={index}
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, index)}
+                            onDragOver={(e) => handleDragOverItem(e, index)}
+                            onDragLeave={handleDragLeaveItem}
+                            onDrop={(e) => handleDropOnItem(e, index)}
+                            onDragEnd={handleDragEnd}
+                            className={`history-item ${item.jobId === currentJobId ? 'active' : ''} ${draggedItem === index ? 'dragging' : ''} ${dragOverItem === index ? 'drag-over' : ''}`}
+                            onClick={() => handleSelectHistory(item)}
+                          >
+                            <div className="history-item-content">
+                              <div className="history-title">{item.title || '未命名影片'}</div>
+                              <div className="history-meta">
+                                <span className="history-time">{formatDate(item.timestamp)}</span>
+                                <span className="history-frames">{item.totalFrames} 張</span>
+                              </div>
+                            </div>
+                            <button
+                              className="delete-btn"
+                              onClick={(e) => deleteHistoryItem(e, index)}
+                              title="刪除"
+                            >
+                              🗑️
+                            </button>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

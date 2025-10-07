@@ -5,6 +5,7 @@
 import { getVideoHistory } from '../api/api';
 
 const HISTORY_KEY = 'videoHistory';
+const FOLDERS_KEY = 'historyFolders';
 const MAX_HISTORY_ITEMS = 20;
 const LAST_SYNC_KEY = 'lastHistorySync';
 
@@ -16,6 +17,7 @@ export const saveToHistory = (result, jobId) => {
       title: result.title || '未命名影片',
       totalFrames: result.total_frames || 0,
       timestamp: new Date().toISOString(),
+      folderId: null,  // null means "uncategorized"
       result: result
     };
 
@@ -98,8 +100,30 @@ export const syncHistoryFromBackend = async () => {
     // Get current localStorage history
     const localHistory = getHistory();
 
-    // Merge: use backend as source of truth, but keep any local items not in backend
-    const mergedHistory = [...backendHistory];
+    // Create a map of local items by jobId to preserve folderId
+    const localItemsMap = new Map();
+    for (const localItem of localHistory) {
+      localItemsMap.set(localItem.jobId, localItem);
+    }
+
+    // Merge: use backend as source of truth, but preserve local folderId
+    const mergedHistory = backendHistory.map(backendItem => {
+      const localItem = localItemsMap.get(backendItem.jobId);
+
+      // If item exists locally, preserve its folderId
+      if (localItem) {
+        return {
+          ...backendItem,
+          folderId: localItem.folderId || null  // Preserve folder classification
+        };
+      }
+
+      // New item from backend, set folderId to null (uncategorized)
+      return {
+        ...backendItem,
+        folderId: null
+      };
+    });
 
     // Add local items that are not in backend
     for (const localItem of localHistory) {
@@ -146,5 +170,132 @@ export const shouldSync = () => {
     return diffMinutes > 5;
   } catch {
     return true;
+  }
+};
+
+// ========== Folder Management ==========
+
+export const getFolders = () => {
+  try {
+    const savedFolders = localStorage.getItem(FOLDERS_KEY);
+    if (savedFolders) {
+      return JSON.parse(savedFolders);
+    }
+    return [];
+  } catch (error) {
+    console.error('Failed to get folders:', error);
+    return [];
+  }
+};
+
+export const createFolder = (name) => {
+  try {
+    const folders = getFolders();
+    const newFolder = {
+      id: Date.now().toString(),
+      name: name,
+      createdAt: new Date().toISOString(),
+      expanded: true
+    };
+    folders.push(newFolder);
+    localStorage.setItem(FOLDERS_KEY, JSON.stringify(folders));
+    console.log('Folder created:', name);
+    return newFolder;
+  } catch (error) {
+    console.error('Failed to create folder:', error);
+    return null;
+  }
+};
+
+export const deleteFolder = (folderId) => {
+  try {
+    // Remove folder
+    let folders = getFolders();
+    folders = folders.filter(f => f.id !== folderId);
+    localStorage.setItem(FOLDERS_KEY, JSON.stringify(folders));
+
+    // Move items in this folder back to uncategorized
+    const history = getHistory();
+    history.forEach(item => {
+      if (item.folderId === folderId) {
+        item.folderId = null;
+      }
+    });
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+
+    console.log('Folder deleted:', folderId);
+    return true;
+  } catch (error) {
+    console.error('Failed to delete folder:', error);
+    return false;
+  }
+};
+
+export const renameFolder = (folderId, newName) => {
+  try {
+    const folders = getFolders();
+    const folder = folders.find(f => f.id === folderId);
+    if (folder) {
+      folder.name = newName;
+      localStorage.setItem(FOLDERS_KEY, JSON.stringify(folders));
+      console.log('Folder renamed:', newName);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Failed to rename folder:', error);
+    return false;
+  }
+};
+
+export const toggleFolderExpanded = (folderId) => {
+  try {
+    const folders = getFolders();
+    const folder = folders.find(f => f.id === folderId);
+    if (folder) {
+      folder.expanded = !folder.expanded;
+      localStorage.setItem(FOLDERS_KEY, JSON.stringify(folders));
+      return folder.expanded;
+    }
+    return false;
+  } catch (error) {
+    console.error('Failed to toggle folder:', error);
+    return false;
+  }
+};
+
+export const moveHistoryToFolder = (historyIndex, folderId) => {
+  try {
+    const history = getHistory();
+    if (historyIndex >= 0 && historyIndex < history.length) {
+      history[historyIndex].folderId = folderId;
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      console.log('History item moved to folder:', folderId);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Failed to move history to folder:', error);
+    return false;
+  }
+};
+
+export const reorderHistory = (fromIndex, toIndex) => {
+  try {
+    const history = getHistory();
+    if (fromIndex >= 0 && fromIndex < history.length && toIndex >= 0 && toIndex < history.length) {
+      // Remove item from original position
+      const [movedItem] = history.splice(fromIndex, 1);
+      // Insert at new position
+      history.splice(toIndex, 0, movedItem);
+
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      console.log(`History reordered: moved item from ${fromIndex} to ${toIndex}`);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Failed to reorder history:', error);
+    return false;
   }
 };
