@@ -37,6 +37,9 @@ ENV/
 *~
 .DS_Store
 
+# Claude settings (local configuration)
+.claude/settings.local.json
+
 # React / Node
 node_modules/
 npm-debug.log*
@@ -55,12 +58,14 @@ backend/storage/videos/**
 backend/storage/frames/**
 backend/storage/subtitles/**
 backend/storage/temp/**
+backend/storage/results/**
 
 # Keep directories but ignore contents
 !backend/storage/videos/.gitkeep
 !backend/storage/frames/.gitkeep
 !backend/storage/subtitles/.gitkeep
 !backend/storage/temp/.gitkeep
+!backend/storage/results/.gitkeep
 
 # Logs
 *.log
