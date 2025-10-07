@@ -61,6 +61,7 @@ class YouTubeService:
             "360": "best[height<=360]",
             "480": "best[height<=480]",
             "720": "best[height<=720]",
+            "1080": "best[height<=1080]",
         }
 
         def progress_hook(d):

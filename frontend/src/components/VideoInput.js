@@ -207,6 +207,7 @@ function VideoInput({ onSubmit }) {
             <option value="360">360p</option>
             <option value="480">480p</option>
             <option value="720">720p (推薦)</option>
+            <option value="1080">1080p (Full HD)</option>
           </select>
         </div>
 
