@@ -48,21 +48,16 @@ class AITranslationService:
         for i, text in enumerate(texts):
             text_block += f"[{i}] {text}\n"
 
-        prompt = f"""You are a professional translator. Translate the following subtitle segments from {source_name} to {target_name}.
+        prompt = f"""Translate these subtitles from {source_name} to {target_name}.
 
-IMPORTANT INSTRUCTIONS:
-1. Translate each line accurately while maintaining natural language flow
-2. Keep the subtitle format - each line should remain on its own line
-3. Preserve the numbering format [0], [1], [2], etc.
-4. Do NOT add any explanations, notes, or extra text
-5. Output ONLY the translated text with the same numbering
-6. Maintain appropriate subtitle length (typically under 42 characters per line for readability)
-7. Use natural, conversational language suitable for video subtitles
+Rules:
+1. Keep the [0], [1], [2] format
+2. Translate naturally - do not add notes or explanations
+3. Output only translations
 
-Source text ({source_name}):
 {text_block}
 
-Translated text ({target_name}):"""
+Translations:"""
 
         return prompt
 
@@ -81,19 +76,22 @@ Translated text ({target_name}):"""
         # Calculate average text length
         avg_length = sum(len(text) for text in texts) / len(texts)
 
-        # Adaptive batch sizing
+        # Adaptive batch sizing - more conservative for long texts
         if avg_length < 30:
             # Short subtitles (e.g., "Yes", "Hello")
-            return 30
+            return 25
         elif avg_length < 60:
             # Medium subtitles (typical)
-            return 20
+            return 15
         elif avg_length < 100:
             # Long subtitles
-            return 15
-        else:
-            # Very long subtitles (paragraphs)
             return 10
+        elif avg_length < 150:
+            # Very long subtitles
+            return 5
+        else:
+            # Extremely long subtitles (200+ chars)
+            return 3
 
     def translate_batch(
         self,
