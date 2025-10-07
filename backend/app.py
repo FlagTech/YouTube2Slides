@@ -69,7 +69,7 @@ subtitle_optimizer = SubtitleOptimizer()
 jobs: Dict[str, Dict] = {}
 
 
-HISTORY_MAX_ENTRIES = 50
+HISTORY_MAX_ENTRIES = 200  # Increased to keep more history events
 RESULTS_DIR = Path("storage/results")
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -199,11 +199,11 @@ async def process_video(request: ProcessVideoRequest, background_tasks: Backgrou
     }
 
 
-async def process_video_task(job_id: str, request: ProcessVideoRequest):
+def process_video_task(job_id: str, request: ProcessVideoRequest):
     """
     Background task to process video
+    Note: This is a sync function because all the processing is synchronous
     """
-    print(f"[DEBUG] Background task started for job_id: {job_id}")
     try:
         log_job_progress(
             job_id,
@@ -212,7 +212,6 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
             progress=5,
             message="開始處理任務..."
         )
-        print(f"[DEBUG] Job {job_id} progress logged: prepare 5%")
 
         start_time = time.time()
 
@@ -241,8 +240,8 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
 
         # Download with progress callback
         def video_download_progress(percent):
-            # Map download progress (0-100%) to job progress (20-28%)
-            job_progress = 20 + int(percent * 0.08)
+            # Map download progress (0-100%) to job progress (20-35%)
+            job_progress = 20 + int(percent * 0.15)
             log_job_progress(
                 job_id,
                 step="download_video",
@@ -259,25 +258,23 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
         log_job_progress(
             job_id,
             step="download_video",
-            progress=28,
+            progress=35,
             message="影片下載完成"
         )
-
         subtitle_auto_flags = {}
         primary_subtitle_is_auto = False
 
         log_job_progress(
             job_id,
             step="fetch_subtitles",
-            progress=32,
+            progress=38,
             message="取得字幕中..."
         )
-
         if request.use_ai_transcription and request.whisper_api_key:
             log_job_progress(
                 job_id,
                 step="ai_transcription",
-                progress=36,
+                progress=40,
                 message="使用 Whisper 產生字幕..."
             )
             try:
@@ -295,7 +292,7 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
                 log_job_progress(
                     job_id,
                     step="ai_transcription",
-                    progress=42,
+                    progress=45,
                     message=f"Whisper 字幕產生完成 ({primary_lang})"
                 )
             except Exception as e:
@@ -324,14 +321,14 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
                 log_job_progress(
                     job_id,
                     step="fetch_subtitles",
-                    progress=44,
+                    progress=47,
                     message="已改用 YouTube 字幕"
                 )
         else:
             log_job_progress(
                 job_id,
                 step="fetch_subtitles",
-                progress=36,
+                progress=40,
                 message="下載 YouTube 字幕中..."
             )
             subtitle_data = youtube_service.download_subtitles(
@@ -352,22 +349,20 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
             log_job_progress(
                 job_id,
                 step="fetch_subtitles",
-                progress=44,
+                progress=47,
                 message="字幕下載完成"
             )
-
         log_job_progress(
             job_id,
             step="subtitle_selection",
-            progress=46,
+            progress=50,
             message=f"使用 {primary_lang} 字幕"
         )
-
         if primary_subtitle_is_auto:
             log_job_progress(
                 job_id,
                 step="subtitle_optimize",
-                progress=50,
+                progress=52,
                 message="優化自動字幕..."
             )
             try:
@@ -524,15 +519,14 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
 
         # Frame extraction with progress callback
         def frame_extraction_progress(percent):
-            # Map extraction progress (0-100%) to job progress (75-82%)
-            job_progress = 75 + int(percent * 0.07)
+            # Map extraction progress (0-100%) to job progress (75-85%)
+            job_progress = 75 + int(percent * 0.10)
             log_job_progress(
                 job_id,
                 step="frame_capture",
                 progress=job_progress,
                 message=f"擷取影格中... {int(percent)}%"
             )
-
         frames_data = frame_extractor.extract_frames_with_subtitles(
             video_path=video_path,
             timestamps=keyframe_timestamps,
@@ -545,48 +539,44 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
         log_job_progress(
             job_id,
             step="frame_capture",
-            progress=82,
+            progress=85,
             message=f"影格擷取完成，共 {len(frames_data)} 張"
         )
-
         log_job_progress(
             job_id,
             step="frame_optimize",
-            progress=85,
+            progress=86,
             message="壓縮影格與整理字幕..."
         )
-
         total_frames = len(frames_data)
         for i, frame in enumerate(frames_data):
             frame_extractor.compress_frame(frame['path'], quality=85)
             if translated_subtitle_texts and i < len(translated_subtitle_texts):
                 frame['subtitle_translated'] = translated_subtitle_texts[i]
 
-            # Report progress every 10 frames or on last frame
-            if (i + 1) % 10 == 0 or (i + 1) == total_frames:
+            # Report progress every 5 frames or on last frame for more granular updates
+            if (i + 1) % 5 == 0 or (i + 1) == total_frames:
                 percent = ((i + 1) / total_frames) * 100
-                job_progress = 85 + int(percent * 0.03)
+                job_progress = 86 + int(percent * 0.04)  # 86-90%
                 log_job_progress(
                     job_id,
                     step="frame_optimize",
                     progress=job_progress,
                     message=f"壓縮影格... {i+1}/{total_frames}"
                 )
-
         log_job_progress(
             job_id,
             step="frame_optimize",
-            progress=88,
+            progress=90,
             message="影格最佳化完成"
         )
-
         ai_outline = None
         ai_provider_used = None
         if request.generate_outline and request.ai_provider:
             log_job_progress(
                 job_id,
                 step="ai_outline",
-                progress=90,
+                progress=92,
                 message=f"使用 {request.ai_provider.value} 產生大綱..."
             )
             try:
@@ -605,7 +595,7 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
                 log_job_progress(
                     job_id,
                     step="ai_outline",
-                    progress=93,
+                    progress=95,
                     message="AI 大綱產生完成"
                 )
             except Exception as e:
@@ -613,25 +603,23 @@ async def process_video_task(job_id: str, request: ProcessVideoRequest):
                 log_job_progress(
                     job_id,
                     step="ai_outline",
-                    progress=93,
+                    progress=95,
                     message="AI 大綱產生失敗，略過"
                 )
         else:
             log_job_progress(
                 job_id,
                 step="ai_outline",
-                progress=90,
+                progress=92,
                 message="未啟用 AI 大綱，略過此步驟"
             )
-
         processing_time = time.time() - start_time
         log_job_progress(
             job_id,
             step="finalize",
-            progress=97,
+            progress=98,
             message="整理處理結果..."
         )
-
         result = ProcessVideoResponse(
             video_id=video_id,
             title=title,

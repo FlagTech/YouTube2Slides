@@ -82,6 +82,7 @@ def install_ffmpeg_windows():
     url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
     with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as tmp:
+        print("[提示] 下載中，這可能需要幾分鐘...")
         urllib.request.urlretrieve(url, tmp.name)
         zip_file = tmp.name
 
@@ -98,20 +99,55 @@ def install_ffmpeg_windows():
     if bin_dirs:
         bin_path = str(bin_dirs[0])
 
-        # 加入系統 PATH
+        print(f"[安裝] ffmpeg 已解壓至: {bin_path}")
+
+        # 加入當前進程的 PATH
         current_path = os.environ.get('PATH', '')
         if bin_path not in current_path:
-            os.environ['PATH'] = f"{current_path};{bin_path}"
+            os.environ['PATH'] = f"{bin_path};{current_path}"
 
-            # 嘗試永久設定（需要管理員權限）
-            try:
-                subprocess.run(['setx', '/M', 'PATH', f"{current_path};{bin_path}"],
-                             check=False, capture_output=True)
-            except:
-                print("[提示] 無法永久設定 PATH，本次運行仍可使用")
+        # 永久設定系統 PATH（使用 PowerShell）
+        try:
+            print("[安裝] 正在將 ffmpeg 加入系統 PATH...")
+
+            # 使用 PowerShell 讀取當前系統 PATH
+            ps_get_path = '[Environment]::GetEnvironmentVariable("Path", "Machine")'
+            result = subprocess.run(
+                ['powershell', '-Command', ps_get_path],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            system_path = result.stdout.strip()
+
+            # 檢查是否已經在 PATH 中
+            if bin_path not in system_path:
+                new_path = f"{system_path};{bin_path}"
+
+                # 使用 PowerShell 設定新的 PATH
+                ps_set_path = f'[Environment]::SetEnvironmentVariable("Path", "{new_path}", "Machine")'
+                subprocess.run(
+                    ['powershell', '-Command', ps_set_path],
+                    check=True,
+                    capture_output=True
+                )
+                print("✓ ffmpeg 已成功加入系統 PATH")
+            else:
+                print("✓ ffmpeg 已在系統 PATH 中")
+
+        except subprocess.CalledProcessError as e:
+            print("[警告] 無法永久設定 PATH（可能需要管理員權限）")
+            print(f"[提示] 請手動將以下路徑加入系統環境變數 PATH:")
+            print(f"       {bin_path}")
+        except Exception as e:
+            print(f"[警告] PATH 設定失敗: {e}")
+            print(f"[提示] 請手動將以下路徑加入系統環境變數 PATH:")
+            print(f"       {bin_path}")
 
     os.unlink(zip_file)
     print("✓ ffmpeg 安裝完成")
+
+    return bin_dirs[0] if bin_dirs else None
 
 def install_with_package_manager():
     """使用套件管理器安裝依賴"""
@@ -178,6 +214,7 @@ def check_and_install_dependencies():
 
     system = platform.system()
     needs_install = []
+    ffmpeg_path = None
 
     # 檢查 Python (應該已經有，因為正在運行這個腳本)
     if check_command('python') or check_command('python3'):
@@ -194,8 +231,26 @@ def check_and_install_dependencies():
         needs_install.append('node')
 
     # 檢查 ffmpeg
-    if check_command('ffmpeg'):
-        print("✓ ffmpeg 已安裝")
+    ffmpeg_found = check_command('ffmpeg')
+
+    # 如果系統 PATH 中沒有 ffmpeg，檢查本地安裝
+    if not ffmpeg_found and system == "Windows":
+        local_ffmpeg_dir = Path("C:/ffmpeg")
+        if local_ffmpeg_dir.exists():
+            bin_dirs = list(local_ffmpeg_dir.glob("ffmpeg-*/bin"))
+            if bin_dirs:
+                ffmpeg_path = bin_dirs[0]
+                # 加入當前環境變數
+                current_path = os.environ.get('PATH', '')
+                ffmpeg_bin = str(ffmpeg_path)
+                if ffmpeg_bin not in current_path:
+                    os.environ['PATH'] = f"{ffmpeg_bin};{current_path}"
+                    print(f"✓ ffmpeg 已安裝（在 {ffmpeg_bin}）")
+                    ffmpeg_found = True
+
+    if ffmpeg_found:
+        if not ffmpeg_path:
+            print("✓ ffmpeg 已安裝")
     else:
         print("✗ 找不到 ffmpeg")
         needs_install.append('ffmpeg')
@@ -231,7 +286,14 @@ def check_and_install_dependencies():
 
             if 'ffmpeg' in needs_install:
                 try:
-                    install_ffmpeg_windows()
+                    ffmpeg_path = install_ffmpeg_windows()
+                    if ffmpeg_path:
+                        # 將 ffmpeg 路徑加入當前環境變數
+                        current_path = os.environ.get('PATH', '')
+                        ffmpeg_bin = str(ffmpeg_path)
+                        if ffmpeg_bin not in current_path:
+                            os.environ['PATH'] = f"{ffmpeg_bin};{current_path}"
+                        print(f"[提示] ffmpeg 路徑已加入當前會話: {ffmpeg_bin}")
                 except Exception as e:
                     print(f"[錯誤] ffmpeg 安裝失敗: {e}")
                     print("請手動下載安裝: https://www.gyan.dev/ffmpeg/builds/")
@@ -245,6 +307,7 @@ def check_and_install_dependencies():
                 install_uv()
 
     print()
+    return ffmpeg_path
 
 def setup_project():
     """設置專案環境"""
@@ -281,13 +344,24 @@ def setup_project():
 
     print()
 
-def start_services():
+def start_services(ffmpeg_path=None):
     """啟動前後端服務"""
     print("=" * 60)
     print("  所有依賴已就緒！")
     print("=" * 60)
     print()
     print("正在啟動服務...\n")
+
+    # 準備環境變數
+    env = os.environ.copy()
+
+    # 如果有 ffmpeg 路徑，確保加入 PATH
+    if ffmpeg_path:
+        ffmpeg_bin = str(ffmpeg_path)
+        current_path = env.get('PATH', '')
+        if ffmpeg_bin not in current_path:
+            env['PATH'] = f"{ffmpeg_bin};{current_path}"
+            print(f"[提示] 已將 ffmpeg 路徑加入服務環境變數: {ffmpeg_bin}")
 
     # 啟動後端
     print("[啟動] 後端服務器 (Port 8000)")
@@ -298,13 +372,15 @@ def start_services():
         backend_process = subprocess.Popen(
             backend_cmd,
             cwd='backend',
+            env=env,
             creationflags=subprocess.CREATE_NEW_CONSOLE
         )
     else:
         # macOS/Linux: 在背景執行並顯示輸出
         backend_process = subprocess.Popen(
             backend_cmd,
-            cwd='backend'
+            cwd='backend',
+            env=env
         )
 
     # 等待後端啟動
@@ -371,13 +447,13 @@ def main():
 
     try:
         # 檢查並安裝依賴
-        check_and_install_dependencies()
+        ffmpeg_path = check_and_install_dependencies()
 
         # 設置專案環境
         setup_project()
 
         # 啟動服務
-        start_services()
+        start_services(ffmpeg_path)
 
     except KeyboardInterrupt:
         print("\n\n程序已中斷")

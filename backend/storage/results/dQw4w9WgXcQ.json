@@ -1,7 +1,7 @@
 {
-  "job_id": "afe4a74b-4a88-4c51-ad15-210a3bc1f3bf",
+  "job_id": "df89606a-61ac-4126-9a97-f7db4804bfd2",
   "video_id": "dQw4w9WgXcQ",
-  "timestamp": "2025-10-03T10:03:46.148166Z",
+  "timestamp": "2025-10-07T02:24:05.898821Z",
   "result": {
     "video_id": "dQw4w9WgXcQ",
     "title": "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)",
@@ -479,7 +479,7 @@
     "subtitles": {
       "en": "storage\\subtitles\\dQw4w9WgXcQ.en-orig.srt"
     },
-    "processing_time": 26.82892894744873,
+    "processing_time": 22.464752912521362,
     "ai_outline": null,
     "translated_subtitle": null,
     "ai_provider": null

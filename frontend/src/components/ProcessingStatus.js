@@ -165,14 +165,6 @@ function ProcessingStatus({ jobId }) {
       {isComplete && <div className="status-badge status-badge--success">已完成</div>}
       {isFailed && <div className="status-badge status-badge--error">處理失敗</div>}
 
-      {/* 當前步驟顯示 */}
-      {!isComplete && !isFailed && currentStepLabel && (
-        <div className="current-step">
-          <div className="current-step-label">當前步驟</div>
-          <div className="current-step-name">{currentStepLabel}</div>
-        </div>
-      )}
-
       {/* 進度條 */}
       <div className="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(displayProgress)}>
         <div
