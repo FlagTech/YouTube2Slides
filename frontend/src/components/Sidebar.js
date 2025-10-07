@@ -7,6 +7,7 @@ import {
   syncHistoryFromBackend,
   shouldSync
 } from '../utils/historyManager';
+import { deleteVideo } from '../api/api';
 
 function Sidebar({ onSelectHistory, onGoHome, currentJobId }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,19 +51,72 @@ function Sidebar({ onSelectHistory, onGoHome, currentJobId }) {
     setIsOpen(false);
   };
 
-  const deleteHistoryItem = (e, index) => {
+  const deleteHistoryItem = async (e, index) => {
     e.stopPropagation();
-    if (deleteHistoryItemStorage(index)) {
-      const updatedHistory = getHistory();
-      setHistory(updatedHistory);
+
+    const history = getHistory();
+    const item = history[index];
+
+    if (!item || !item.jobId) {
+      console.error('Invalid history item');
+      return;
+    }
+
+    // Confirm deletion
+    if (!window.confirm(`確定要刪除「${item.title}」嗎？\n\n這將同時刪除本地儲存的影片和圖片檔案。`)) {
+      return;
+    }
+
+    try {
+      // Call backend API to delete files
+      await deleteVideo(item.jobId);
+      console.log('Video files deleted successfully');
+
+      // Delete from localStorage
+      if (deleteHistoryItemStorage(index)) {
+        const updatedHistory = getHistory();
+        setHistory(updatedHistory);
+        console.log('History item deleted successfully');
+      }
+    } catch (error) {
+      console.error('Failed to delete video files:', error);
+      alert('刪除檔案失敗，請稍後再試');
     }
   };
 
-  const clearAllHistory = () => {
-    if (window.confirm('確定要清除所有歷史記錄嗎？')) {
-      if (clearHistoryStorage()) {
-        setHistory([]);
+  const clearAllHistory = async () => {
+    if (!window.confirm('確定要清除所有歷史記錄嗎？\n\n這將同時刪除所有本地儲存的影片和圖片檔案。')) {
+      return;
+    }
+
+    const currentHistory = getHistory();
+    let deletedCount = 0;
+    let failedCount = 0;
+
+    // Delete all videos from backend
+    for (const item of currentHistory) {
+      if (item.jobId) {
+        try {
+          await deleteVideo(item.jobId);
+          deletedCount++;
+          console.log(`Deleted video: ${item.title}`);
+        } catch (error) {
+          console.error(`Failed to delete video ${item.title}:`, error);
+          failedCount++;
+        }
       }
+    }
+
+    // Clear localStorage
+    if (clearHistoryStorage()) {
+      setHistory([]);
+    }
+
+    // Show result
+    if (failedCount > 0) {
+      alert(`已刪除 ${deletedCount} 個項目，${failedCount} 個項目刪除失敗`);
+    } else {
+      console.log(`All ${deletedCount} items deleted successfully`);
     }
   };
 

@@ -801,20 +801,42 @@ async def download_all_frames(video_id: str):
 @app.delete("/api/video/{video_id}")
 async def delete_video(video_id: str):
     """
-    Delete video and associated frames
+    Delete video and all associated files (frames, subtitles, results)
     """
     try:
+        deleted_items = {
+            "frames": 0,
+            "video": False,
+            "subtitles": 0,
+            "results": False
+        }
+
         # Delete frames
-        deleted_frames = frame_extractor.cleanup_frames(video_id)
+        deleted_items["frames"] = frame_extractor.cleanup_frames(video_id)
 
         # Delete video file
         video_path = Path(f"./storage/videos/{video_id}.mp4")
         if video_path.exists():
             video_path.unlink()
+            deleted_items["video"] = True
+
+        # Delete subtitle files
+        subtitles_dir = Path(f"./storage/subtitles")
+        if subtitles_dir.exists():
+            subtitle_files = list(subtitles_dir.glob(f"{video_id}*.srt"))
+            for subtitle_file in subtitle_files:
+                subtitle_file.unlink()
+                deleted_items["subtitles"] += 1
+
+        # Delete result JSON
+        result_path = Path(f"./storage/results/{video_id}.json")
+        if result_path.exists():
+            result_path.unlink()
+            deleted_items["results"] = True
 
         return {
-            "message": "Video deleted successfully",
-            "deleted_frames": deleted_frames
+            "message": "Video and associated files deleted successfully",
+            "deleted": deleted_items
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

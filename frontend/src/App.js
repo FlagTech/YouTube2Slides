@@ -92,7 +92,7 @@ function App() {
 
       <header className="App-header">
         <h1>YouTube 影片懶人觀看術</h1>
-        <p>將 YouTube 影片轉換為靜態投影片與字幕</p>
+        <p>將 YouTube 影片轉換為靜態可讀投影片、翻譯字幕並生成 AI 大綱</p>
       </header>
 
       <main className="App-main">
