@@ -138,14 +138,10 @@ popd
 timeout /t 3 /nobreak >nul
 
 echo [INFO] Starting frontend server...
+echo [INFO] Browser will open automatically when ready...
 pushd frontend
 start "Frontend Server" cmd /k "npm start"
 popd
-
-echo.
-echo [INFO] Opening browser in 5 seconds...
-timeout /t 5 /nobreak >nul
-start "" "http://127.0.0.1:3000"
 
 echo.
 echo ====================================
@@ -159,6 +155,5 @@ echo.
 echo [INFO] Servers are running in separate windows.
 echo [INFO] Close the server windows to stop the services.
 echo.
-echo You can close this window now.
-echo.
-pause
+echo This setup window will close automatically in 3 seconds...
+timeout /t 3 /nobreak >nul
