@@ -45,17 +45,68 @@
 
 ## 快速啟動
 
-### 🚀 懶人完全自動安裝與啟動（推薦新手）
-
-**不需要安裝任何東西！** 腳本會自動安裝所有需要的工具。
+### 🚀 一鍵自動安裝與啟動（推薦新手）
 
 #### Windows 用戶
 
-1️⃣ 下載 zip 壓縮檔
+**前置準備（必須）：**
 
-2️⃣ 解壓縮檔案，進入 YouTube2Slides 資料夾
+1. **安裝 Python 3.9+**
+   - 下載：https://www.python.org/downloads/
+   - 安裝時請勾選「Add Python to PATH」
 
-3️⃣ 雙擊執行 **setup_and_start.bat** （會自動安裝 Node.js、ffmpeg、uv 等工具）
+2. **安裝 Node.js 16+**
+   - 下載：https://nodejs.org/
+   - 建議下載 LTS（長期支援）版本
+
+3. **安裝 ffmpeg（必須）**
+
+   ffmpeg 是影片處理的核心工具，必須安裝才能正常使用本程式。
+
+   **方法 1：使用 Chocolatey（推薦）**
+   ```bash
+   # 先安裝 Chocolatey（以管理員身份執行 PowerShell）
+   # 安裝指令請參考：https://chocolatey.org/install
+
+   # 安裝 ffmpeg
+   choco install ffmpeg
+   ```
+
+   **方法 2：手動安裝**
+   - 下載：https://www.gyan.dev/ffmpeg/builds/
+   - 選擇「ffmpeg-release-essentials.zip」
+   - 解壓縮到任意位置（例如：`C:\ffmpeg`）
+   - 將 `bin` 資料夾路徑加入系統環境變數 PATH
+     1. 右鍵點擊「本機」→「內容」
+     2. 點擊「進階系統設定」
+     3. 點擊「環境變數」
+     4. 在「系統變數」中找到「Path」，點擊「編輯」
+     5. 點擊「新增」，輸入 ffmpeg 的 bin 路徑（例如：`C:\ffmpeg\bin`）
+     6. 點擊「確定」儲存
+   - 重新開啟命令提示字元，輸入 `ffmpeg -version` 驗證安裝成功
+
+**啟動步驟：**
+
+1️⃣ 下載專案並解壓縮
+
+2️⃣ 進入 `YouTube2Slides` 資料夾
+
+3️⃣ 雙擊執行 **`setup_and_start.bat`**
+
+腳本會自動：
+- ✅ 檢查 Python、Node.js、ffmpeg 是否已安裝
+- ✅ 自動安裝 uv 套件管理工具
+- ✅ 建立 Python 虛擬環境
+- ✅ 安裝所有後端依賴
+- ✅ 安裝所有前端依賴
+- ✅ 啟動後端服務器（port 8000）
+- ✅ 啟動前端服務器（port 3000）
+- ✅ 自動開啟瀏覽器
+
+**注意事項：**
+- 如果缺少 Python、Node.js 或 ffmpeg，腳本會顯示錯誤訊息並提供下載連結
+- 首次執行會需要較長時間下載依賴（約 5-10 分鐘）
+- 服務會在獨立視窗中運行，關閉視窗即可停止服務
 
 #### macOS 用戶
 
@@ -126,18 +177,22 @@ python3 start.py
 ### 前置需求
 - Python 3.9+
 - Node.js 16+
-- uv (Python 套件管理工具)
-- ffmpeg（必須安裝並加入系統 PATH）
+- ffmpeg（**必須**，用於影片處理）
+- uv (Python 套件管理工具) - 會自動安裝
 
-### 安裝 ffmpeg
+### 安裝 ffmpeg（必須）
+
+ffmpeg 是影片處理的核心工具，必須安裝。
 
 **Windows:**
 ```bash
-# 使用 Chocolatey
+# 方法 1: 使用 Chocolatey（推薦）
 choco install ffmpeg
 
-# 或下載二進位檔案
-# https://www.gyan.dev/ffmpeg/builds/
+# 方法 2: 手動下載安裝
+# 1. 下載：https://www.gyan.dev/ffmpeg/builds/
+# 2. 解壓縮到 C:\ffmpeg
+# 3. 將 C:\ffmpeg\bin 加入系統 PATH
 ```
 
 **macOS:**
@@ -145,11 +200,17 @@ choco install ffmpeg
 brew install ffmpeg
 ```
 
-**Linux:**
+**Linux (Ubuntu/Debian):**
 ```bash
 sudo apt update
 sudo apt install ffmpeg
 ```
+
+**驗證安裝：**
+```bash
+ffmpeg -version
+```
+如果顯示版本資訊，表示安裝成功。
 
 ### 安裝 uv
 
@@ -330,7 +391,11 @@ REACT_APP_API_URL=http://localhost:8000
 ```
 Error: ffmpeg not found
 ```
-**解決方案**: 安裝 ffmpeg 並確保加入系統 PATH
+**解決方案**:
+1. 安裝 ffmpeg（參考上方安裝說明）
+2. 確保 ffmpeg 已加入系統 PATH
+3. 重新開啟命令提示字元或重啟電腦
+4. 執行 `ffmpeg -version` 驗證安裝成功
 
 ### 字幕不可用
 ```

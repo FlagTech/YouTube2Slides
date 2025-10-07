@@ -214,6 +214,7 @@ def check_and_install_dependencies():
 
     system = platform.system()
     needs_install = []
+    missing_required = []
     ffmpeg_path = None
 
     # 檢查 Python (應該已經有，因為正在運行這個腳本)
@@ -221,14 +222,14 @@ def check_and_install_dependencies():
         print("✓ Python 已安裝")
     else:
         print("✗ 找不到 Python")
-        needs_install.append('python')
+        missing_required.append('Python')
 
     # 檢查 Node.js
     if check_command('node'):
         print("✓ Node.js 已安裝")
     else:
         print("✗ 找不到 Node.js")
-        needs_install.append('node')
+        missing_required.append('Node.js')
 
     # 檢查 ffmpeg
     ffmpeg_found = check_command('ffmpeg')
@@ -253,7 +254,7 @@ def check_and_install_dependencies():
             print("✓ ffmpeg 已安裝")
     else:
         print("✗ 找不到 ffmpeg")
-        needs_install.append('ffmpeg')
+        missing_required.append('ffmpeg')
 
     # 檢查 uv
     if check_command('uv'):
@@ -264,49 +265,41 @@ def check_and_install_dependencies():
 
     print()
 
-    # 如果有缺少的依賴
-    if needs_install:
-        print(f"[提示] 發現缺少以下工具: {', '.join(needs_install)}\n")
+    # 如果缺少必要的依賴（Python、Node.js、ffmpeg）
+    if missing_required:
+        print(f"[錯誤] 缺少必要的工具: {', '.join(missing_required)}\n")
+        print("請先安裝以下工具：\n")
 
-        if system == "Windows":
-            response = input("是否自動安裝? (y/n): ").lower()
-            if response != 'y':
-                print("請手動安裝依賴後再運行此腳本")
-                sys.exit(1)
+        if 'Python' in missing_required:
+            print("  Python 3.9+")
+            print("  下載: https://www.python.org/downloads/")
+            print()
 
-            print("\n[提示] 需要管理員權限來安裝軟體")
-            print("若出現 UAC 提示，請點擊「是」\n")
+        if 'Node.js' in missing_required:
+            print("  Node.js 16+")
+            print("  下載: https://nodejs.org/")
+            print()
 
-            if 'node' in needs_install:
-                try:
-                    install_nodejs_windows()
-                except Exception as e:
-                    print(f"[錯誤] Node.js 安裝失敗: {e}")
-                    print("請手動下載安裝: https://nodejs.org/")
+        if 'ffmpeg' in missing_required:
+            print("  ffmpeg")
+            if system == "Windows":
+                print("  方法 1: choco install ffmpeg")
+                print("  方法 2: https://www.gyan.dev/ffmpeg/builds/")
+            elif system == "Darwin":
+                print("  方法: brew install ffmpeg")
+            else:
+                print("  方法: sudo apt install ffmpeg")
+            print()
 
-            if 'ffmpeg' in needs_install:
-                try:
-                    ffmpeg_path = install_ffmpeg_windows()
-                    if ffmpeg_path:
-                        # 將 ffmpeg 路徑加入當前環境變數
-                        current_path = os.environ.get('PATH', '')
-                        ffmpeg_bin = str(ffmpeg_path)
-                        if ffmpeg_bin not in current_path:
-                            os.environ['PATH'] = f"{ffmpeg_bin};{current_path}"
-                        print(f"[提示] ffmpeg 路徑已加入當前會話: {ffmpeg_bin}")
-                except Exception as e:
-                    print(f"[錯誤] ffmpeg 安裝失敗: {e}")
-                    print("請手動下載安裝: https://www.gyan.dev/ffmpeg/builds/")
+        print("安裝完成後請重新執行此腳本")
+        sys.exit(1)
 
-            if 'uv' in needs_install:
-                install_uv()
+    # 只自動安裝 uv
+    if 'uv' in needs_install:
+        print("[提示] 正在自動安裝 uv...\n")
+        install_uv()
+        print()
 
-        else:  # macOS or Linux
-            install_with_package_manager()
-            if 'uv' in needs_install:
-                install_uv()
-
-    print()
     return ffmpeg_path
 
 def setup_project():
