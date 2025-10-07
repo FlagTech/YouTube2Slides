@@ -53,7 +53,7 @@ app.add_middleware(
 )
 
 # Mount static files
-app.mount("/storage", StaticFiles(directory="storage"), name="storage")
+app.mount("/storage", StaticFiles(directory="../storage"), name="storage")
 
 # Initialize services
 youtube_service = YouTubeService()
@@ -70,7 +70,7 @@ jobs: Dict[str, Dict] = {}
 
 
 HISTORY_MAX_ENTRIES = 200  # Increased to keep more history events
-RESULTS_DIR = Path("storage/results")
+RESULTS_DIR = Path("../storage/results")
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -487,7 +487,7 @@ def process_video_task(job_id: str, request: ProcessVideoRequest):
                 )
 
             from pathlib import Path
-            translated_subtitle_dir = Path("./storage/subtitles")
+            translated_subtitle_dir = Path("../storage/subtitles")
             translated_subtitle_path = str(translated_subtitle_dir / f"{video_id}.{request.translate_to}.translated.srt")
 
             with open(translated_subtitle_path, 'w', encoding='utf-8') as f:
@@ -756,8 +756,8 @@ async def download_all_frames(video_id: str):
     """
     try:
         # 檢查兩種可能的目錄結構
-        frames_dir_nested = Path(f"./storage/frames/{video_id}")
-        frames_dir_flat = Path("./storage/frames")
+        frames_dir_nested = Path(f"../storage/frames/{video_id}")
+        frames_dir_flat = Path("../storage/frames")
 
         frame_files = []
 
@@ -815,13 +815,13 @@ async def delete_video(video_id: str):
         deleted_items["frames"] = frame_extractor.cleanup_frames(video_id)
 
         # Delete video file
-        video_path = Path(f"./storage/videos/{video_id}.mp4")
+        video_path = Path(f"../storage/videos/{video_id}.mp4")
         if video_path.exists():
             video_path.unlink()
             deleted_items["video"] = True
 
         # Delete subtitle files
-        subtitles_dir = Path(f"./storage/subtitles")
+        subtitles_dir = Path(f"../storage/subtitles")
         if subtitles_dir.exists():
             subtitle_files = list(subtitles_dir.glob(f"{video_id}*.srt"))
             for subtitle_file in subtitle_files:
@@ -829,7 +829,7 @@ async def delete_video(video_id: str):
                 deleted_items["subtitles"] += 1
 
         # Delete result JSON
-        result_path = Path(f"./storage/results/{video_id}.json")
+        result_path = Path(f"../storage/results/{video_id}.json")
         if result_path.exists():
             result_path.unlink()
             deleted_items["results"] = True
@@ -850,9 +850,10 @@ async def health_check():
 
 if __name__ == "__main__":
     # Create storage directories
-    Path("./storage/videos").mkdir(parents=True, exist_ok=True)
-    Path("./storage/frames").mkdir(parents=True, exist_ok=True)
-    Path("./storage/subtitles").mkdir(parents=True, exist_ok=True)
+    Path("../storage/videos").mkdir(parents=True, exist_ok=True)
+    Path("../storage/frames").mkdir(parents=True, exist_ok=True)
+    Path("../storage/subtitles").mkdir(parents=True, exist_ok=True)
+    Path("../storage/results").mkdir(parents=True, exist_ok=True)
 
     uvicorn.run(
         "app:app",

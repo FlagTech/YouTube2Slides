@@ -53,19 +53,21 @@ frontend/build/
 coverage/
 .nyc_output
 
-# Storage (generated files)
-backend/storage/videos/**
-backend/storage/frames/**
-backend/storage/subtitles/**
-backend/storage/temp/**
-backend/storage/results/**
+# Storage (generated files) - now in root storage folder
+storage/videos/**
+storage/frames/**
+storage/subtitles/**
+storage/temp/**
+storage/results/**
+storage/audio/**
 
 # Keep directories but ignore contents
-!backend/storage/videos/.gitkeep
-!backend/storage/frames/.gitkeep
-!backend/storage/subtitles/.gitkeep
-!backend/storage/temp/.gitkeep
-!backend/storage/results/.gitkeep
+!storage/videos/.gitkeep
+!storage/frames/.gitkeep
+!storage/subtitles/.gitkeep
+!storage/temp/.gitkeep
+!storage/results/.gitkeep
+!storage/audio/.gitkeep
 
 # Logs
 *.log

@@ -57,8 +57,16 @@ function Sidebar({ onSelectHistory, onGoHome, currentJobId }) {
     const history = getHistory();
     const item = history[index];
 
-    if (!item || !item.jobId) {
+    if (!item) {
       console.error('Invalid history item');
+      return;
+    }
+
+    // Get videoId from result object or fallback to jobId
+    const videoId = item.videoId || (item.result && item.result.video_id) || item.jobId;
+
+    if (!videoId) {
+      console.error('No video ID found in history item');
       return;
     }
 
@@ -68,8 +76,8 @@ function Sidebar({ onSelectHistory, onGoHome, currentJobId }) {
     }
 
     try {
-      // Call backend API to delete files
-      await deleteVideo(item.jobId);
+      // Call backend API to delete files (pass videoId, not jobId)
+      await deleteVideo(videoId);
       console.log('Video files deleted successfully');
 
       // Delete from localStorage
@@ -95,9 +103,12 @@ function Sidebar({ onSelectHistory, onGoHome, currentJobId }) {
 
     // Delete all videos from backend
     for (const item of currentHistory) {
-      if (item.jobId) {
+      // Get videoId from result object or fallback to jobId
+      const videoId = item.videoId || (item.result && item.result.video_id) || item.jobId;
+
+      if (videoId) {
         try {
-          await deleteVideo(item.jobId);
+          await deleteVideo(videoId);
           deletedCount++;
           console.log(`Deleted video: ${item.title}`);
         } catch (error) {
@@ -107,9 +118,11 @@ function Sidebar({ onSelectHistory, onGoHome, currentJobId }) {
       }
     }
 
-    // Clear localStorage
+    // Clear localStorage and sync timestamp
     if (clearHistoryStorage()) {
       setHistory([]);
+      // Clear last sync timestamp to prevent re-sync from bringing back deleted items
+      localStorage.removeItem('lastHistorySync');
     }
 
     // Show result

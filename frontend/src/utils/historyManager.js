@@ -12,6 +12,7 @@ export const saveToHistory = (result, jobId) => {
   try {
     const historyItem = {
       jobId: jobId,
+      videoId: result.video_id || null,  // Store videoId for deletion
       title: result.title || '未命名影片',
       totalFrames: result.total_frames || 0,
       timestamp: new Date().toISOString(),

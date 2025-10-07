@@ -12,7 +12,7 @@ import io
 class FrameExtractor:
     """Extract frames from video at specified timestamps"""
 
-    def __init__(self, output_dir: str = "./storage/frames"):
+    def __init__(self, output_dir: str = "../storage/frames"):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 

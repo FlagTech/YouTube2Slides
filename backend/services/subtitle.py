@@ -58,7 +58,22 @@ class SubtitleProcessor:
                 end_time = self._parse_timestamp(end_str)
 
                 # Parse text (may span multiple lines)
-                text = '\n'.join(lines[2:]).strip()
+                text_lines = lines[2:]
+
+                # Remove duplicate consecutive lines (common in auto-generated subtitles)
+                cleaned_lines = []
+                prev_line = None
+                for line in text_lines:
+                    line = line.strip()
+                    if line and line != prev_line:
+                        cleaned_lines.append(line)
+                        prev_line = line
+
+                text = '\n'.join(cleaned_lines).strip()
+
+                # Skip empty segments
+                if not text:
+                    continue
 
                 segments.append(SubtitleSegment(
                     index=index,
@@ -117,16 +132,28 @@ class SubtitleProcessor:
     def get_subtitle_at_time(self, timestamp: float) -> str:
         """
         Get subtitle text at a specific timestamp
-        When timestamp equals start_time of a segment, return that segment (not the previous one)
+        When multiple subtitles overlap, return the one closest to the timestamp
         """
+        matching_segments = []
+
+        # Find all segments that contain this timestamp
         for segment in self.segments:
-            # Use < for end_time to avoid matching both segments when timestamp == start_time/end_time boundary
-            if segment.start_time <= timestamp < segment.end_time:
-                return segment.text
-            # Special case: if this is the last segment and timestamp equals end_time
-            if segment == self.segments[-1] and timestamp == segment.end_time:
-                return segment.text
-        return ""
+            if segment.start_time <= timestamp <= segment.end_time:
+                matching_segments.append(segment)
+
+        if not matching_segments:
+            return ""
+
+        # If multiple segments match (overlapping subtitles), return the one
+        # whose midpoint is closest to the timestamp
+        if len(matching_segments) > 1:
+            best_segment = min(
+                matching_segments,
+                key=lambda s: abs((s.start_time + s.end_time) / 2.0 - timestamp)
+            )
+            return best_segment.text
+
+        return matching_segments[0].text
 
     def merge_segments(self, max_duration: float = 5.0) -> List[SubtitleSegment]:
         """

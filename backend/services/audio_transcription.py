@@ -13,9 +13,9 @@ class AudioTranscriptionService:
     """Service for transcribing audio using OpenAI Whisper"""
 
     def __init__(self):
-        self.audio_dir = Path("./storage/audio")
+        self.audio_dir = Path("../storage/audio")
         self.audio_dir.mkdir(parents=True, exist_ok=True)
-        self.subtitle_dir = Path("./storage/subtitles")
+        self.subtitle_dir = Path("../storage/subtitles")
         self.subtitle_dir.mkdir(parents=True, exist_ok=True)
 
     def extract_audio_from_video(self, video_path: str, video_id: str) -> str:
@@ -80,10 +80,12 @@ class AudioTranscriptionService:
             with open(audio_path, 'rb') as audio_file:
                 # Use Whisper API for transcription
                 # response_format='verbose_json' gives us timestamps
+                # timestamp_granularities=['segment'] provides better sentence-level segmentation
                 transcription = client.audio.transcriptions.create(
                     model="whisper-1",
                     file=audio_file,
                     response_format="verbose_json",
+                    timestamp_granularities=["segment"],  # Sentence-level timestamps
                     language=language  # None for auto-detection
                 )
 

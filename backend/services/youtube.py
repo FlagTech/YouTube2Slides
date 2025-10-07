@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 class YouTubeService:
-    def __init__(self, download_path: str = "./storage/videos"):
+    def __init__(self, download_path: str = "../storage/videos"):
         self.download_path = Path(download_path)
         self.download_path.mkdir(parents=True, exist_ok=True)
 
@@ -264,7 +264,7 @@ class YouTubeService:
             manual_subtitle_keys.update(normalize_codes(code))
 
         video_id = self._extract_video_id(url)
-        subtitle_dir = Path("./storage/subtitles")
+        subtitle_dir = Path("../storage/subtitles")
         subtitle_dir.mkdir(parents=True, exist_ok=True)
 
         def is_auto_caption(lang_code: str, variant_code: str) -> bool:
