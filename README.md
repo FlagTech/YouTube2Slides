@@ -1,51 +1,41 @@
-# YouTube to Readable Slides
+# YouTube2Slides
 
-將 YouTube 影片轉換為靜態閱讀版本（投影片）的 Web 應用程式。
+> 將 YouTube 影片轉換為靜態閱讀版本（投影片）的 Web 應用程式。
+
+- 一鍵輸入 YouTube 連結，下載影片與字幕（手動或自動產生）。
+- 智慧斷句與字幕最佳化（支援中/日/韓等 CJK 字元）。
+- 擷取關鍵畫面，生成「逐頁幻燈片」觀看流程。
+- 可選擇翻譯與 AI 產生影片大綱（支援 OpenAI / Claude / Gemini / 本機 Ollama）。
 
 ## 功能特色
 
-### 核心功能
-- ✅ **YouTube 影片處理**
-  - 支援多種 YouTube URL 格式
-  - 下載影片並提取資訊（標題、時長、頻道、縮圖等）
-  - 可調整影片畫質（360p/480p/720p）
+- ✅ 將 YouTube 影片轉換為好閱讀的投影片
 
-- ✅ **字幕處理**
-  - 支援多語言字幕（繁體中文、簡體中文、英文、日文、韓文等）
-  - 自動翻譯功能
-  - 時間軸同步處理
-  - SRT 格式解析與匯出
+![screen_1](./images/1.png)
 
-- ✅ **投影片生成**
-  - 根據字幕變換自動截取關鍵幀
-  - 可調整截圖間隔時間
-  - 圖片壓縮與最佳化
-  - 批次處理多個幀
+- ✅ 一鍵下載各種檔案
 
-- ✅ **互動式瀏覽**
-  - 投影片檢視器
-  - 鍵盤導航支援（方向鍵）
-  - 縮圖預覽列表
-  - 即時字幕顯示
+![screen_2](./images/2.png)
 
-## 技術架構
+- ✅ AI 產生影片大綱
 
-### 後端
-- **框架**: FastAPI (Python)
-- **影片處理**: yt-dlp, ffmpeg-python
-- **字幕處理**: 自訂 SRT 解析器
-- **翻譯**: deep-translator (Google Translate)
-- **圖片處理**: Pillow
-- **非同步任務**: Background Tasks
+![screen_3](./images/3.png)
 
-### 前端
-- **框架**: React 18
-- **HTTP 客戶端**: Axios
-- **樣式**: CSS3 (漸層、動畫、響應式設計)
+- ✅ 輸入 YouTube 連結 → 自動處理
+
+![screen_4](./images/4.png)
+
+- ✅ 支援多國語言翻譯及截圖設定
+
+![screen_5](./images/5.png)
+
+- ✅ 可選擇使用本機 Ollama 模型或 OpenAI、Gemini、Calude 等 API 
+
+![screen_6](./images/6.png)
 
 ## 快速啟動說明
 
-#### Windows 用戶
+### Windows 用戶
 
 **前置準備（必須）：**
 
@@ -116,34 +106,11 @@
 - 首次執行會需要較長時間下載依賴套件
 - 應用程式會在 cmd 視窗中運行，關閉即可停止服務
 
-#### macOS 用戶
-
-1️⃣ 開啟終端機（Terminal）
-
-2️⃣ 進入專案資料夾：
-```bash
-cd ~/Downloads/YouTube2Slides
-```
-
-3️⃣ 執行自動安裝腳本：
+### macOS / Linux
+- 以終端機進入專案根目錄後執行：
 ```bash
 python3 setup_and_start.py
 ```
-
-**注意事項：**
-- 腳本會自動檢測是否已安裝 Homebrew
-- 如果未安裝，會提示安裝指令
-- 缺少的套件會透過 Homebrew 自動安裝
-- 服務啟動後會在終端機中顯示輸出，按 Ctrl+C 停止
-
-#### Linux 用戶
-
-```bash
-python3 setup_and_start.py
-```
-
-腳本會提示使用 apt 安裝依賴（適用於 Ubuntu/Debian）
-
 
 ## 使用方式
 
@@ -154,19 +121,18 @@ python3 setup_and_start.py
    - 貼上 YouTube 影片連結
    - 選擇影片畫質（360p/480p/720p）
 
-3. **設定字幕選項**
-   - 選擇要下載的字幕語言
+3. **設定選項**
    - （可選）選擇翻譯目標語言
    - 調整截圖間隔時間（秒）
+   - 選擇是否生成 AI 大綱 & 翻譯
 
 4. **處理影片**
-   - 點擊「Process Video」開始處理
+   - 點擊「處理影片」
    - 等待處理完成（會顯示進度條）
 
 5. **瀏覽投影片**
    - 使用左右箭頭鍵或按鈕導航
    - 點擊縮圖快速跳轉
-   - 閱讀每張投影片的字幕
 
 ## API 端點
 
@@ -318,9 +284,3 @@ Access to fetch has been blocked by CORS policy
 MIT License
 
 ## 貢獻
-
-歡迎提交 Issue 和 Pull Request！
-
-## 聯絡
-
-如有問題或建議，請開啟 GitHub Issue。
