@@ -197,16 +197,6 @@ def install_with_package_manager():
             print("請手動安裝依賴")
             sys.exit(1)
 
-def install_uv():
-    """安裝 uv"""
-    print("[安裝] 正在安裝 uv...")
-    try:
-        subprocess.run([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
-        subprocess.run([sys.executable, '-m', 'pip', 'install', 'uv'], check=True)
-        print("✓ uv 安裝完成")
-    except subprocess.CalledProcessError:
-        print("[錯誤] uv 安裝失敗")
-        sys.exit(1)
 
 def check_and_install_dependencies():
     """檢查並安裝所有依賴"""
@@ -261,11 +251,11 @@ def check_and_install_dependencies():
         print("✓ uv 已安裝")
     else:
         print("✗ 找不到 uv")
-        needs_install.append('uv')
+        missing_required.append('uv')
 
     print()
 
-    # 如果缺少必要的依賴（Python、Node.js、ffmpeg）
+    # 如果缺少必要的依賴
     if missing_required:
         print(f"[錯誤] 缺少必要的工具: {', '.join(missing_required)}\n")
         print("請先安裝以下工具：\n")
@@ -291,14 +281,18 @@ def check_and_install_dependencies():
                 print("  方法: sudo apt install ffmpeg")
             print()
 
+        if 'uv' in missing_required:
+            print("  uv (Python 套件管理工具)")
+            if system == "Windows":
+                print('  安裝指令: powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"')
+            elif system == "Darwin":
+                print('  安裝指令: curl -LsSf https://astral.sh/uv/install.sh | sh')
+            else:
+                print('  安裝指令: curl -LsSf https://astral.sh/uv/install.sh | sh')
+            print()
+
         print("安裝完成後請重新執行此腳本")
         sys.exit(1)
-
-    # 只自動安裝 uv
-    if 'uv' in needs_install:
-        print("[提示] 正在自動安裝 uv...\n")
-        install_uv()
-        print()
 
     return ffmpeg_path
 

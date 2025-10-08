@@ -61,21 +61,19 @@ echo.
 echo [CHECK] Checking uv...
 where uv >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [INFO] Installing uv package manager...
-    python -m pip install --user uv
-    if !errorlevel! neq 0 (
-        echo [ERROR] Failed to install uv
-        pause
-        exit /b 1
-    )
-
-    :: Add Python user Scripts to PATH for current session
-    for /f "tokens=*" %%i in ('python -c "import sysconfig; print(sysconfig.get_path('scripts', 'nt_user'))"') do set USER_SCRIPTS=%%i
-    set "PATH=%USER_SCRIPTS%;%PATH%"
-    echo [OK] uv installed and added to PATH for this session
+    echo [ERROR] uv not found in PATH
+    echo.
+    echo Please install uv package manager first:
+    echo   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+    echo.
+    echo After installation, please restart this script.
+    echo.
+    pause
+    exit /b 1
+) else (
+    for /f "tokens=*" %%i in ('where uv') do echo [OK] uv found: %%i
+    for /f "tokens=*" %%i in ('uv --version') do echo [OK] Version: %%i
 )
-
-for /f "tokens=*" %%i in ('uv --version') do echo [OK] uv Version: %%i
 echo.
 
 :: Check backend environment

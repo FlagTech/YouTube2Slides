@@ -37,18 +37,25 @@
 
 #### 🔧 前置準備（必須）
 1. **安裝 Python 3.9+**
-- [下載連結](https://www.python.org/downloads/)
-- 安裝時請勾選 **「Add Python to PATH」**
+   - [下載連結](https://www.python.org/downloads/)
+   - 安裝時請勾選 **「Add Python to PATH」**
 
 
 2. **安裝 Node.js 16+**
-- [下載連結](https://nodejs.org/)
-- 建議下載 **LTS（長期支援）版本**
+   - [下載連結](https://nodejs.org/)
+   - 建議下載 **LTS（長期支援）版本**
 
 
-3. **安裝 ffmpeg（必須）**
-ffmpeg 是影片處理核心工具，必須安裝才能正常使用。
+3. **安裝 uv（Python 套件管理工具）**
+   - 開啟 PowerShell 並執行以下指令：
+   ```powershell
+   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+   ```
+   - 完成後重新開啟終端機，輸入 `uv --version` 驗證安裝成功
 
+
+4. **安裝 ffmpeg（必須）**
+   ffmpeg 是影片處理核心工具，必須安裝才能正常使用。
 
    *方法 1：使用 Chocolatey（推薦）*
    - 以系統管理員身份執行「PowerShell」，並一次貼上整段以下指令：
@@ -84,20 +91,31 @@ ffmpeg 是影片處理核心工具，必須安裝才能正常使用。
 
 
 此腳本會自動完成：
-- ✅ 檢查 Python / Node.js / ffmpeg
-- ✅ 安裝 `uv` 套件管理工具
+- ✅ 檢查 Python / Node.js / ffmpeg / uv
 - ✅ 建立 Python 虛擬環境 & 安裝所需依賴
 - ✅ 啟動前後端服務器（port 8000；port 3000）
 - ✅ 自動開啟瀏覽器
 
 **注意事項：**
-- 缺少必要環境會提示錯誤並提供下載連結
+- 缺少必要環境會提示錯誤並提供安裝指引
 - 首次執行會需要較長時間安裝依賴
 - 程式會在 cmd 視窗中運行，關閉即可停止
 
 ---
 
 ### 🍏 macOS / Linux 用戶
+
+#### 🔧 前置準備
+1. **安裝 Python 3.9+、Node.js 16+、ffmpeg**
+   - macOS: `brew install python node ffmpeg`
+   - Ubuntu/Debian: `sudo apt install python3 nodejs npm ffmpeg`
+
+2. **安裝 uv**
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+#### ▶️ 啟動步驟
 進入專案根目錄後執行：
 ```bash
 python3 setup_and_start.py
