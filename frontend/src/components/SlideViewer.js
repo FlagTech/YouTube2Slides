@@ -26,9 +26,6 @@ function SlideViewer({ result, onReset }) {
   const safeDuration = videoDuration || 0;
 
   const thumbnailStripRef = useRef(null);
-  const isPointerActiveRef = useRef(false);
-  const isDraggingRef = useRef(false);
-  const lastUpdateTimeRef = useRef(0);
 
   // Download functions
   const downloadFile = async (url, filename) => {
@@ -118,73 +115,6 @@ function SlideViewer({ result, onReset }) {
     URL.revokeObjectURL(url);
   };
 
-  const updateSlideByPointer = useCallback((clientX, forceUpdate = false) => {
-    if (!thumbnailStripRef.current || frames.length === 0) return;
-
-    // Throttle updates for smoother performance (except for force updates)
-    const now = Date.now();
-    if (!forceUpdate && now - lastUpdateTimeRef.current < 16) return; // ~60fps
-    lastUpdateTimeRef.current = now;
-
-    const container = thumbnailStripRef.current;
-    const rect = container.getBoundingClientRect();
-    const scrollLeft = container.scrollLeft;
-
-    // Calculate position relative to the visible area plus scroll offset
-    const relativeX = clientX - rect.left;
-    const absoluteX = relativeX + scrollLeft;
-
-    // Calculate ratio based on total scrollable width
-    const totalWidth = container.scrollWidth;
-    const ratio = Math.max(0, Math.min(absoluteX / totalWidth, 1));
-
-    // Map ratio to frame index
-    const nextIndex = Math.round(ratio * (frames.length - 1));
-
-    setCurrentSlide(nextIndex);
-  }, [frames.length]);
-
-  const handleTimelinePointerDown = useCallback((event) => {
-    if ((event.button ?? 0) !== 0 && event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
-    if (event.isPrimary === false) return;
-    if (!thumbnailStripRef.current || frames.length === 0) return;
-
-    // Don't prevent default to allow click events to work on thumbnails
-    const target = event.target.closest('.thumbnail');
-    if (target) {
-      // This is a click on a thumbnail, don't start dragging
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-    isPointerActiveRef.current = true;
-    isDraggingRef.current = true;
-    lastUpdateTimeRef.current = 0; // Reset throttle
-    updateSlideByPointer(event.clientX, true);
-    thumbnailStripRef.current.setPointerCapture?.(event.pointerId);
-  }, [frames.length, updateSlideByPointer]);
-
-  const handleTimelinePointerMove = useCallback((event) => {
-    if (!isPointerActiveRef.current) return;
-    event.preventDefault();
-    event.stopPropagation();
-    updateSlideByPointer(event.clientX);
-  }, [updateSlideByPointer]);
-
-  const handleTimelinePointerEnd = useCallback((event) => {
-    if (!isPointerActiveRef.current) return;
-    event.preventDefault();
-    isPointerActiveRef.current = false;
-    if (thumbnailStripRef.current?.hasPointerCapture?.(event.pointerId)) {
-      thumbnailStripRef.current.releasePointerCapture(event.pointerId);
-    }
-    // Delay resetting isDragging to allow final scroll to center
-    setTimeout(() => {
-      isDraggingRef.current = false;
-    }, 100);
-  }, []);
-
   const nextSlide = useCallback(() => {
     if (currentSlide < frames.length - 1) {
       setCurrentSlide(currentSlide + 1);
@@ -219,7 +149,7 @@ function SlideViewer({ result, onReset }) {
 
       container.scrollTo({
         left: thumbnailCenter - containerCenter,
-        behavior: isDraggingRef.current ? 'auto' : 'smooth'
+        behavior: 'smooth'
       });
     }
   }, [currentSlide]);
@@ -321,11 +251,6 @@ function SlideViewer({ result, onReset }) {
         <div
           className="thumbnail-strip"
           ref={thumbnailStripRef}
-          onPointerDown={handleTimelinePointerDown}
-          onPointerMove={handleTimelinePointerMove}
-          onPointerUp={handleTimelinePointerEnd}
-          onPointerLeave={handleTimelinePointerEnd}
-          onPointerCancel={handleTimelinePointerEnd}
         >
           {frames.map((f, index) => (
             <div
