@@ -175,63 +175,54 @@ GET /api/languages
 ## 專案結構
 
 ```
-VIDEO_TO_READABLE/
+YouTube2Slides/
 ├── backend/
-│   ├── app.py                 # FastAPI 主應用
-│   ├── requirements.txt       # Python 依賴
+│   ├── app.py                      # FastAPI 主應用
+│   ├── pyproject.toml              # uv 專案設定檔
 │   ├── services/
-│   │   ├── youtube.py         # YouTube 下載服務
-│   │   ├── subtitle.py        # 字幕處理服務
-│   │   ├── frame_extractor.py # 影格提取服務
-│   │   └── translator.py      # 翻譯服務
+│   │   ├── youtube.py              # YouTube 影片下載 (yt-dlp)
+│   │   ├── subtitle.py             # 字幕解析、合併、時間軸處理
+│   │   ├── subtitle_optimizer.py   # 字幕斷行與格式優化
+│   │   ├── frame_extractor.py      # 影格擷取 (ffmpeg)
+│   │   ├── translator.py           # Google 翻譯服務
+│   │   ├── ai_translator.py        # AI 翻譯 (OpenAI/Claude/Gemini/Ollama)
+│   │   ├── ai_outline.py           # AI 大綱生成服務
+│   │   └── audio_transcription.py  # Whisper 音訊轉字幕
 │   ├── models/
-│   │   └── schemas.py         # Pydantic 資料模型
-│   └── utils/                 # 工具函數
+│   │   └── schemas.py              # Pydantic 資料模型
+│   └── utils/                      # 工具函數
 ├── frontend/
 │   ├── public/
 │   │   └── index.html
 │   ├── src/
-│   │   ├── App.js             # 主應用組件
-│   │   ├── components/        # React 組件
-│   │   │   ├── VideoInput.js  # 影片輸入表單
-│   │   │   ├── ProcessingStatus.js  # 處理狀態
-│   │   │   └── SlideViewer.js # 投影片檢視器
-│   │   └── api/
-│   │       └── api.js         # API 客戶端
+│   │   ├── App.js                  # 主應用組件
+│   │   ├── App.css                 # 全域樣式
+│   │   ├── components/
+│   │   │   ├── VideoInput.js       # 影片輸入表單與 AI 設定
+│   │   │   ├── ProcessingStatus.js # 處理進度顯示
+│   │   │   ├── SlideViewer.js      # 投影片檢視器（含鍵盤導航）
+│   │   │   └── Sidebar.js          # 歷史記錄與資料夾管理
+│   │   ├── api/
+│   │   │   └── api.js              # API 客戶端
+│   │   └── utils/
+│   │       ├── historyManager.js   # localStorage 歷史記錄管理
+│   │       └── settingsManager.js  # 使用者設定管理
 │   └── package.json
-├── storage/                   # 儲存目錄
-│   ├── videos/                # 下載的影片
-│   ├── frames/                # 擷取的影格
-│   └── subtitles/             # 字幕檔案
+├── storage/                        # 後端儲存目錄
+│   └── {job_id}/
+│       ├── video.mp4               # 下載的影片
+│       ├── original_subtitle.srt   # 原始字幕
+│       ├── translated_subtitle.srt # 翻譯後字幕
+│       ├── ai_outline.txt          # AI 生成的大綱
+│       └── frames/                 # 截取的影格
+│           ├── frame_0001.jpg
+│           ├── frame_0002.jpg
+│           └── ...
+├── setup_and_start.bat             # Windows 自動啟動腳本
+├── setup_and_start.py              # macOS/Linux 自動啟動腳本
+├── CLAUDE.md                       # Claude Code 專案說明
 └── README.md
 ```
-
-## 環境變數
-
-### 前端 (.env)
-```env
-REACT_APP_API_URL=http://localhost:8000
-```
-
-### 後端
-無需額外環境變數設定（使用預設值）
-
-## 效能最佳化
-
-1. **影片畫質選擇**
-   - 720p: 高畫質，檔案較大，處理時間較長
-   - 480p: 平衡畫質與效能（推薦）
-   - 360p: 快速處理，檔案較小
-
-2. **截圖間隔**
-   - 2 秒: 預設值，適合大多數影片
-   - 3-5 秒: 減少投影片數量，加快處理
-   - 1 秒: 更詳細的投影片，處理時間較長
-
-3. **圖片壓縮**
-   - 自動壓縮為 JPEG 格式
-   - 預設品質: 85%
-   - 自動調整尺寸至 1280px 寬度
 
 ## 疑難排解
 
