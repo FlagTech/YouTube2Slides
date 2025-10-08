@@ -64,8 +64,9 @@
    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
    iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
    ```
+   - 完成後輸入 `choco -v` 驗證安裝成功
+   - 透過 choco 安裝 ffmpeg：
    ```powershell
-   choco -v
    choco install ffmpeg
    ```
    - 完成後輸入 `ffmpeg -version` 驗證安裝成功
@@ -82,11 +83,13 @@
 ---
 
 
-#### ▶️ 啟動步驟
+#### ▶️ 快速啟動步驟
 
 
-1️⃣ 下載並解壓縮專案
+1️⃣ `git clone https://github.com/FlagTech/YouTube2Slides` 或直接下載、解壓縮專案
+
 2️⃣ 進入 `YouTube2Slides` 資料夾
+
 3️⃣ 雙擊執行 **`setup_and_start.bat`**
 
 
