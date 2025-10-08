@@ -21,118 +21,90 @@
 
 ![screen_3](./images/3.png)
 
-- ✅ 輸入 YouTube 連結 → 自動處理
 
-![screen_4](./images/4.png)
+| 輸入 YouTube 連結自動處理 | 支援多國語言翻譯 | 可使用多種 AI 模型 |
+|-------|-------|-------|
+| <img src="./images/4.png"> | <img src="./images/5.png"> | <img src="./images/6.png"> |
 
-- ✅ 支援多國語言翻譯及截圖設定
 
-![screen_5](./images/5.png)
 
-- ✅ 可選擇使用本機 Ollama 模型或 OpenAI、Gemini、Calude 等 API 
 
-![screen_6](./images/6.png)
+## 🚀 快速啟動說明
 
-## 快速啟動說明
 
-### Windows 用戶
+### 🪟 Windows 用戶
 
-**前置準備（必須）：**
 
+#### 🔧 前置準備（必須）
 1. **安裝 Python 3.9+**
-   - 下載：https://www.python.org/downloads/
-   - 安裝時請勾選「Add Python to PATH」
+- [下載連結](https://www.python.org/downloads/)
+- 安裝時請勾選 **「Add Python to PATH」**
+
 
 2. **安裝 Node.js 16+**
-   - 下載：https://nodejs.org/
-   - 建議下載 LTS（長期支援）版本
+- [下載連結](https://nodejs.org/)
+- 建議下載 **LTS（長期支援）版本**
+
 
 3. **安裝 ffmpeg（必須）**
+ffmpeg 是影片處理核心工具，必須安裝才能正常使用。
 
-   ffmpeg 是影片處理的核心工具，必須安裝才能正常使用本程式。
 
-   **方法 1：使用 Chocolatey（推薦）**
-   1. 以系統管理員身份執行「PowerShell」，並一次貼上整段以下指令：
+   *方法 1：使用 Chocolatey（推薦）*
+   - 以系統管理員身份執行「PowerShell」，並一次貼上整段以下指令：
    ```powershell
    Set-ExecutionPolicy Bypass -Scope Process -Force; `
    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
    iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
    ```
-   2. 驗證安裝是否成功
    ```powershell
    choco -v
-   ```
-   3. 自動下載 ffmpeg、解壓縮、配置 PATH
-   ```powershell
    choco install ffmpeg
    ```
-   4. 重新開啟命令提示字元，輸入 `ffmpeg -version` 驗證安裝成功
-   5. 注意！安裝完後請重新開機
+   - 完成後輸入 `ffmpeg -version` 驗證安裝成功
+   - ⚠️ 請重新開機
 
-   **方法 2：手動安裝**
-   1. 下載：https://www.gyan.dev/ffmpeg/builds/
-   2. 選擇「ffmpeg-release-essentials.zip」
-   3. 解壓縮到任意位置（例如：`C:\ffmpeg`）
-   4. 將 `bin` 資料夾路徑加入系統環境變數 PATH
-     - 點擊「開始」→「設定」
-     - 進入「系統」→「系統資訊」→「進階系統設定」
-     - 點擊「環境變數」
-     - 在「系統變數」中找到「Path」，點擊「編輯」
-     - 點擊「新增」，輸入 ffmpeg 的 bin 路徑（例如：`C:\ffmpeg\bin`）
-     - 點擊「確定」儲存
-   5. 重新開啟命令提示字元，輸入 `ffmpeg -version` 驗證安裝成功
-   6. 注意！安裝完後請重新開機
+   *方法 2：手動安裝*
+   - [下載 ffmpeg](https://www.gyan.dev/ffmpeg/builds/) → 選擇 **ffmpeg-release-essentials.zip**
+   - 解壓縮到任意位置（例：`C:\ffmpeg`）
+   - 將 `bin` 路徑加入 **系統環境變數 PATH**
+   - 重新開啟命令提示字元並輸入 `ffmpeg -version` 驗證
+   - ⚠️ 請重新開機
 
-**啟動步驟：**
 
-1️⃣ 下載專案並解壓縮
+---
 
+
+#### ▶️ 啟動步驟
+
+
+1️⃣ 下載並解壓縮專案
 2️⃣ 進入 `YouTube2Slides` 資料夾
-
 3️⃣ 雙擊執行 **`setup_and_start.bat`**
 
-腳本會自動：
-- ✅ 檢查 Python、Node.js、ffmpeg 是否已安裝
-- ✅ 自動安裝 uv 套件管理工具
-- ✅ 建立 Python 虛擬環境
-- ✅ 安裝所有後端依賴
-- ✅ 安裝所有前端依賴
-- ✅ 啟動後端服務器（port 8000）
-- ✅ 啟動前端服務器（port 3000）
+
+此腳本會自動完成：
+- ✅ 檢查 Python / Node.js / ffmpeg
+- ✅ 安裝 `uv` 套件管理工具
+- ✅ 建立 Python 虛擬環境 & 安裝所需依賴
+- ✅ 啟動前後端服務器（port 8000；port 3000）
 - ✅ 自動開啟瀏覽器
 
 **注意事項：**
-- 如果缺少 Python、Node.js 或 ffmpeg，腳本會顯示錯誤訊息並提供下載連結
-- 首次執行會需要較長時間下載依賴套件
-- 應用程式會在 cmd 視窗中運行，關閉即可停止服務
+- 缺少必要環境會提示錯誤並提供下載連結
+- 首次執行會需要較長時間安裝依賴
+- 程式會在 cmd 視窗中運行，關閉即可停止
 
-### macOS / Linux
-- 以終端機進入專案根目錄後執行：
+---
+
+### 🍏 macOS / Linux 用戶
+進入專案根目錄後執行：
 ```bash
 python3 setup_and_start.py
 ```
 
-## 使用方式
 
-1. **開啟應用程式**
-   - 瀏覽器訪問 `http://localhost:3000`
-
-2. **輸入 YouTube URL**
-   - 貼上 YouTube 影片連結
-   - 選擇影片畫質（360p/480p/720p）
-
-3. **設定選項**
-   - （可選）選擇翻譯目標語言
-   - 調整截圖間隔時間（秒）
-   - 選擇是否生成 AI 大綱 & 翻譯
-
-4. **處理影片**
-   - 點擊「處理影片」
-   - 等待處理完成（會顯示進度條）
-
-5. **瀏覽投影片**
-   - 使用左右箭頭鍵或按鈕導航
-   - 點擊縮圖快速跳轉
+- 點擊縮圖快速跳轉
 
 ## API 端點
 
