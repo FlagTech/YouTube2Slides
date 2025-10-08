@@ -69,9 +69,9 @@ if %errorlevel% neq 0 (
         exit /b 1
     )
 
-    :: Add Python Scripts to PATH for current session
-    for /f "tokens=*" %%i in ('python -c "import site; print(site.USER_BASE)"') do set USER_BASE=%%i
-    set "PATH=%USER_BASE%\Scripts;%PATH%"
+    :: Add Python user Scripts to PATH for current session
+    for /f "tokens=*" %%i in ('python -c "import sysconfig; print(sysconfig.get_path('scripts', 'nt_user'))"') do set USER_SCRIPTS=%%i
+    set "PATH=%USER_SCRIPTS%;%PATH%"
     echo [OK] uv installed and added to PATH for this session
 )
 
