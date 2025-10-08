@@ -294,9 +294,7 @@ Error: ffmpeg not found
 Error: No subtitles available
 ```
 **解決方案**:
-- 確認影片有字幕
-- 嘗試不同的語言選項
-- 檢查是否有自動生成字幕
+- 使用 OpenAI Whisper 模型辨識音頻 (需申請 API Key)
 
 ### CORS 錯誤
 ```

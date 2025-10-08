@@ -13,7 +13,7 @@ class SubtitleOptimizer:
 
     def __init__(self):
         # Sentence-ending punctuation marks
-        self.sentence_endings = {'.', '!', '?', '。', '！', '？'}
+        self.sentence_endings = {'.', '!', '?', '。', '！', '？', '。'}
         # Comma and pause marks (not sentence endings)
         self.pause_marks = {',', ';', ':', '，', '；', '：'}
         # Ellipsis should not merge (treat as sentence ending)
@@ -54,6 +54,27 @@ class SubtitleOptimizer:
             'max_time_gap': 1.5,     # Maximum time gap between segments (seconds)
             'min_segments': 2,       # Minimum segments to merge
         }
+
+        # Normalize punctuation handling for CJK (e.g., Japanese/Chinese)
+        # This overrides any mis-encoded defaults and ensures proper sentence detection.
+        self._setup_unicode_punct()
+
+    def _setup_unicode_punct(self):
+        """Ensure punctuation sets and regex support CJK sentence breaks.
+
+        YouTube auto captions in Japanese/Chinese commonly use full-width punctuation.
+        This method defines a Unicode-aware sentence pattern so that '。', '！', '？'
+        and ellipsis are treated as valid sentence boundaries without requiring
+        a following space/capital letter.
+        """
+        # Sentence-ending punctuation marks (Latin + CJK)
+        self.sentence_endings = {'.', '!', '?', '。', '！', '？'}
+        # Comma and pause marks (not sentence endings)
+        self.pause_marks = {',', ';', ':', '、', '，', '；', '：'}
+        # Ellipsis should be treated as sentence ending
+        self.ellipsis_marks = {'…', '...', '……'}
+        # Regex to find any sentence-ending punctuation (no dependency on spaces/case)
+        self.sentence_pattern = re.compile(r"[\.\!\?。！？]|(?:\.\.\.)|…")
 
     def contains_complete_sentence(self, text: str) -> bool:
         """
