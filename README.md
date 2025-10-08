@@ -43,9 +43,7 @@
 - **HTTP 客戶端**: Axios
 - **樣式**: CSS3 (漸層、動畫、響應式設計)
 
-## 快速啟動
-
-### 🚀 一鍵自動安裝與啟動（推薦新手）
+## 快速啟動說明
 
 #### Windows 用戶
 
@@ -64,26 +62,36 @@
    ffmpeg 是影片處理的核心工具，必須安裝才能正常使用本程式。
 
    **方法 1：使用 Chocolatey（推薦）**
-   ```bash
-   # 先安裝 Chocolatey（以管理員身份執行 PowerShell）
-   # 安裝指令請參考：https://chocolatey.org/install
-
-   # 安裝 ffmpeg
+   1. 以系統管理員身份執行「PowerShell」，並一次貼上整段以下指令：
+   ```powershell
+   Set-ExecutionPolicy Bypass -Scope Process -Force; `
+   [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
+   iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+   ```
+   2. 驗證安裝是否成功
+   ```powershell
+   choco -v
+   ```
+   3. 自動下載 ffmpeg、解壓縮、配置 PATH
+   ```powershell
    choco install ffmpeg
    ```
+   4. 重新開啟命令提示字元，輸入 `ffmpeg -version` 驗證安裝成功
+   5. 注意！安裝完後請重新開機
 
    **方法 2：手動安裝**
-   - 下載：https://www.gyan.dev/ffmpeg/builds/
-   - 選擇「ffmpeg-release-essentials.zip」
-   - 解壓縮到任意位置（例如：`C:\ffmpeg`）
-   - 將 `bin` 資料夾路徑加入系統環境變數 PATH
-     1. 右鍵點擊「本機」→「內容」
-     2. 點擊「進階系統設定」
-     3. 點擊「環境變數」
-     4. 在「系統變數」中找到「Path」，點擊「編輯」
-     5. 點擊「新增」，輸入 ffmpeg 的 bin 路徑（例如：`C:\ffmpeg\bin`）
-     6. 點擊「確定」儲存
-   - 重新開啟命令提示字元，輸入 `ffmpeg -version` 驗證安裝成功
+   1. 下載：https://www.gyan.dev/ffmpeg/builds/
+   2. 選擇「ffmpeg-release-essentials.zip」
+   3. 解壓縮到任意位置（例如：`C:\ffmpeg`）
+   4. 將 `bin` 資料夾路徑加入系統環境變數 PATH
+     - 點擊「開始」→「設定」
+     - 進入「系統」→「系統資訊」→「進階系統設定」
+     - 點擊「環境變數」
+     - 在「系統變數」中找到「Path」，點擊「編輯」
+     - 點擊「新增」，輸入 ffmpeg 的 bin 路徑（例如：`C:\ffmpeg\bin`）
+     - 點擊「確定」儲存
+   5. 重新開啟命令提示字元，輸入 `ffmpeg -version` 驗證安裝成功
+   6. 注意！安裝完後請重新開機
 
 **啟動步驟：**
 
@@ -105,8 +113,8 @@
 
 **注意事項：**
 - 如果缺少 Python、Node.js 或 ffmpeg，腳本會顯示錯誤訊息並提供下載連結
-- 首次執行會需要較長時間下載依賴（約 5-10 分鐘）
-- 服務會在獨立視窗中運行，關閉視窗即可停止服務
+- 首次執行會需要較長時間下載依賴套件
+- 應用程式會在 cmd 視窗中運行，關閉即可停止服務
 
 #### macOS 用戶
 
@@ -136,122 +144,6 @@ python3 setup_and_start.py
 
 腳本會提示使用 apt 安裝依賴（適用於 Ubuntu/Debian）
 
-### 一鍵啟動（已安裝依賴的用戶）
-
-**Windows 用戶:**
-```bash
-# 方法 1: 雙擊批次檔
-start.bat
-
-# 方法 2: 使用 Python 腳本
-python start.py
-```
-
-**Linux/macOS 用戶:**
-```bash
-# 方法 1: 使用 Shell 腳本
-chmod +x start.sh  # 首次執行需要
-./start.sh
-
-# 方法 2: 使用 Python 腳本
-python3 start.py
-```
-
-啟動腳本會自動：
-- 檢查系統依賴
-- 初始化虛擬環境（首次運行）
-- 安裝前端依賴（首次運行）
-- 同時啟動前端和後端服務
-
-服務啟動後可訪問：
-- **前端**: http://localhost:3000
-- **後端**: http://localhost:8000
-- **API 文檔**: http://localhost:8000/docs
-
-詳細啟動說明請參考 [README_STARTUP.md](README_STARTUP.md)
-
----
-
-## 手動安裝與設定
-
-### 前置需求
-- Python 3.9+
-- Node.js 16+
-- ffmpeg（**必須**，用於影片處理）
-- uv (Python 套件管理工具) - 會自動安裝
-
-### 安裝 ffmpeg（必須）
-
-ffmpeg 是影片處理的核心工具，必須安裝。
-
-**Windows:**
-```bash
-# 方法 1: 使用 Chocolatey（推薦）
-choco install ffmpeg
-
-# 方法 2: 手動下載安裝
-# 1. 下載：https://www.gyan.dev/ffmpeg/builds/
-# 2. 解壓縮到 C:\ffmpeg
-# 3. 將 C:\ffmpeg\bin 加入系統 PATH
-```
-
-**macOS:**
-```bash
-brew install ffmpeg
-```
-
-**Linux (Ubuntu/Debian):**
-```bash
-sudo apt update
-sudo apt install ffmpeg
-```
-
-**驗證安裝：**
-```bash
-ffmpeg -version
-```
-如果顯示版本資訊，表示安裝成功。
-
-### 安裝 uv
-
-**Windows/macOS/Linux:**
-```bash
-# 使用官方安裝腳本
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# 或使用 pip
-pip install uv
-```
-
-### 後端安裝
-
-1. 進入後端目錄並同步依賴：
-```bash
-cd backend
-uv sync
-```
-
-2. 啟動後端伺服器：
-```bash
-uv run python app.py
-```
-
-後端將在 `http://localhost:8000` 啟動
-
-### 前端安裝
-
-1. 進入前端目錄並安裝依賴：
-```bash
-cd frontend
-npm install
-```
-
-2. 啟動開發伺服器：
-```bash
-npm start
-```
-
-前端將在 `http://localhost:3000` 啟動
 
 ## 使用方式
 
