@@ -48,27 +48,94 @@ class AITranslationService:
         for i, text in enumerate(texts):
             text_block += f"[{i}] {text}\n"
 
-        prompt = f"""Translate these subtitles from {source_name} to {target_name}.
+        prompt = f"""Translate ALL {len(texts)} subtitles from {source_name} to {target_name}.
+
+IMPORTANT: You MUST translate ALL {len(texts)} items below.
 
 Rules:
-1. Keep the [0], [1], [2] format
+1. Keep the [0], [1], [2] numbering format
 2. Translate naturally - do not add notes or explanations
-3. Output only translations
+3. Output ONLY translations, nothing else
+4. Make sure to translate ALL items
 
+Input ({len(texts)} items):
 {text_block}
 
-Translations:"""
+Output ({len(texts)} translations):"""
 
         return prompt
 
-    def _calculate_optimal_batch_size(self, texts: List[str]) -> int:
+    def _get_target_char_count(self, provider: Optional[AIProvider] = None) -> int:
         """
-        Calculate optimal batch size based on text length
+        Get target character count per batch based on provider
+
+        Returns:
+            Target total character count for each batch
+        """
+        if provider == AIProvider.OLLAMA:
+            # Conservative for Ollama local models
+            # Target: 300 chars = ~1-5 subtitles (typically 3-5, dynamic based on length)
+            return 300
+        else:
+            # More generous for cloud APIs
+            return 1000  # ~1000 chars = ~15-25 subtitles
+
+    def _calculate_batch_by_char_count(self, texts: List[str], provider: Optional[AIProvider] = None, max_batch_size: int = 5) -> int:
+        """
+        Calculate batch size based on accumulated character count
+
+        Strategy:
+        - Accumulate characters until reaching target count
+        - Ensures consistent processing load per batch
+        - Better handles mixed-length subtitles
+        - Limits maximum batch size for safety
+
+        Args:
+            texts: List of text strings to analyze
+            provider: AI provider (affects target char count)
+            max_batch_size: Maximum number of items per batch (default: 5)
+
+        Returns:
+            Number of texts to include in this batch
+        """
+        if not texts:
+            return 0
+
+        target_chars = self._get_target_char_count(provider)
+        accumulated_chars = 0
+        batch_count = 0
+
+        for text in texts:
+            text_length = len(text)
+
+            # If adding this text would exceed target, decide whether to include it
+            if accumulated_chars + text_length > target_chars:
+                # If we haven't added any texts yet, include at least one
+                if batch_count == 0:
+                    batch_count = 1
+                break
+
+            # Add this text to the batch
+            accumulated_chars += text_length
+            batch_count += 1
+
+            # Enforce maximum batch size limit
+            if batch_count >= max_batch_size:
+                break
+
+        # Ensure at least 1 text per batch, but not more than max_batch_size
+        return max(1, min(batch_count, max_batch_size))
+
+    def _calculate_optimal_batch_size(self, texts: List[str], provider: Optional[AIProvider] = None) -> int:
+        """
+        Calculate optimal batch size based on text length and provider
+        (Legacy method - kept for backward compatibility)
 
         Rationale:
         - Longer texts consume more tokens
         - Smaller batches for long texts prevent context window overflow
         - Larger batches for short texts improve efficiency
+        - Ollama local models have stricter output token limits
         """
         if not texts:
             return 20
@@ -76,7 +143,19 @@ Translations:"""
         # Calculate average text length
         avg_length = sum(len(text) for text in texts) / len(texts)
 
-        # Adaptive batch sizing - more conservative for long texts
+        # Ollama models need much smaller batches due to output token limits
+        if provider == AIProvider.OLLAMA:
+            # Very conservative batch sizes for Ollama to ensure complete translations
+            if avg_length < 20:
+                return 3  # Very short texts
+            elif avg_length < 40:
+                return 3  # Short texts
+            elif avg_length < 60:
+                return 2  # Medium texts
+            else:
+                return 2  # Long texts
+
+        # For cloud providers (OpenAI, Claude, Gemini) - more generous
         if avg_length < 30:
             # Short subtitles (e.g., "Yes", "Hello")
             return 25
@@ -101,7 +180,8 @@ Translations:"""
         provider: AIProvider,
         model: Optional[str] = None,
         api_key: Optional[str] = None,
-        batch_size: int = None
+        batch_size: int = None,
+        use_dynamic_batching: bool = True
     ) -> List[str]:
         """
         Translate a batch of texts using AI
@@ -114,6 +194,7 @@ Translations:"""
             model: Specific model name
             api_key: API key (optional, will use env var if not provided)
             batch_size: Number of texts per batch (auto-calculated if None)
+            use_dynamic_batching: If True, recalculate batch size for each batch based on remaining texts
 
         Returns:
             List of translated texts
@@ -121,18 +202,41 @@ Translations:"""
         if not texts:
             return []
 
-        # Auto-calculate optimal batch size if not provided
-        if batch_size is None:
-            batch_size = self._calculate_optimal_batch_size(texts)
-            print(f"[AI Translator] Auto-calculated batch size: {batch_size} (avg text length: {sum(len(t) for t in texts) / len(texts):.1f})")
-
         all_translations = []
-        total_batches = (len(texts) + batch_size - 1) // batch_size
+        remaining_texts = texts[:]
+        batch_num = 0
+
+        # Calculate initial batch size if not provided
+        if batch_size is None and not use_dynamic_batching:
+            batch_size = self._calculate_optimal_batch_size(texts, provider)
+            avg_len = sum(len(t) for t in texts) / len(texts)
+            print(f"[AI Translator] Initial batch size: {batch_size} (provider: {provider.value}, avg text length: {avg_len:.1f})")
 
         # Process in batches to avoid token limits
-        for batch_num, i in enumerate(range(0, len(texts), batch_size), 1):
-            batch = texts[i:i + batch_size]
-            print(f"[AI Translator] Processing batch {batch_num}/{total_batches} ({len(batch)} items)")
+        while remaining_texts:
+            batch_num += 1
+
+            # Dynamic batching: recalculate batch size for remaining texts based on character count
+            if use_dynamic_batching:
+                current_batch_size = self._calculate_batch_by_char_count(remaining_texts, provider)
+                batch_chars = sum(len(t) for t in remaining_texts[:current_batch_size])
+                target_chars = self._get_target_char_count(provider)
+                print(f"[AI Translator] Batch {batch_num}: {current_batch_size} items ({batch_chars}/{target_chars} chars, {len(remaining_texts)} remaining)")
+            else:
+                current_batch_size = batch_size
+
+            # Get current batch
+            batch = remaining_texts[:current_batch_size]
+            remaining_texts = remaining_texts[current_batch_size:]
+
+            # Calculate total batches estimate (for display)
+            if use_dynamic_batching:
+                estimated_remaining_batches = (len(remaining_texts) + current_batch_size - 1) // current_batch_size if current_batch_size > 0 else 0
+                total_estimate = batch_num + estimated_remaining_batches
+                print(f"[AI Translator] Processing batch {batch_num}/~{total_estimate} ({len(batch)} items, {len(remaining_texts)} remaining)")
+            else:
+                total_batches = batch_num + ((len(remaining_texts) + current_batch_size - 1) // current_batch_size)
+                print(f"[AI Translator] Processing batch {batch_num}/{total_batches} ({len(batch)} items)")
 
             try:
                 if provider == AIProvider.OPENAI:
@@ -167,10 +271,10 @@ Translations:"""
                         translated_batch.append(batch[missing_index])
 
                 all_translations.extend(translated_batch)
-                print(f"[AI Translator] Batch {batch_num}/{total_batches} completed: {len(translated_batch)} translations")
+                print(f"[AI Translator] Batch {batch_num} completed: {len(translated_batch)} translations")
 
             except Exception as e:
-                print(f"[ERROR] Translation batch {batch_num}/{total_batches} failed: {str(e)}")
+                print(f"[ERROR] Translation batch {batch_num} failed: {str(e)}")
                 import traceback
                 traceback.print_exc()
                 # Fallback: return original text if translation fails
@@ -378,6 +482,12 @@ Translations:"""
         model_name = model or "llama3.2"
         prompt = self._get_translation_prompt(source_lang, target_lang, texts)
 
+        # Calculate required output tokens (estimate: 3x input for Chinese)
+        estimated_output_chars = sum(len(text) for text in texts) * 3
+        estimated_output_tokens = estimated_output_chars // 2  # Rough estimate
+        # Use larger buffer and higher minimum for Ollama
+        num_predict = max(3000, min(8000, estimated_output_tokens + 1000))  # Add generous buffer
+
         url = f"{self.ollama_base_url}/api/generate"
         payload = {
             "model": model_name,
@@ -385,9 +495,11 @@ Translations:"""
             "stream": False,
             "options": {
                 "temperature": 0.3,
-                "num_predict": 4000
+                "num_predict": num_predict
             }
         }
+
+        print(f"[Ollama] Batch size: {len(texts)}, num_predict: {num_predict}")
 
         response = requests.post(url, json=payload, timeout=180)
         response.raise_for_status()
