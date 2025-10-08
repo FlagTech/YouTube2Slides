@@ -103,9 +103,6 @@ ffmpeg 是影片處理核心工具，必須安裝才能正常使用。
 python3 setup_and_start.py
 ```
 
-
-- 點擊縮圖快速跳轉
-
 ## API 端點
 
 ### 影片資訊

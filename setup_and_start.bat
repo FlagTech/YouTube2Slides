@@ -68,14 +68,14 @@ if %errorlevel% neq 0 (
         pause
         exit /b 1
     )
-    echo [INFO] uv installed. Please close and restart this script.
-    echo.
-    pause
-    exit /b 0
-) else (
-    for /f "tokens=*" %%i in ('where uv') do echo [OK] uv found: %%i
-    for /f "tokens=*" %%i in ('uv --version') do echo [OK] Version: %%i
+
+    :: Add Python Scripts to PATH for current session
+    for /f "tokens=*" %%i in ('python -c "import site; print(site.USER_BASE)"') do set USER_BASE=%%i
+    set "PATH=%USER_BASE%\Scripts;%PATH%"
+    echo [OK] uv installed and added to PATH for this session
 )
+
+for /f "tokens=*" %%i in ('uv --version') do echo [OK] uv Version: %%i
 echo.
 
 :: Check backend environment
