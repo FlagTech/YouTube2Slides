@@ -252,13 +252,10 @@ Access to fetch has been blocked by CORS policy
 ## 未來改進
 
 - [ ] OCR 文字辨識（從投影片提取額外文字）
-- [ ] AI 自動摘要（整合 OpenAI/Claude API）
-- [ ] 場景變化偵測（更智能的截圖時機）
 - [ ] 匯出 PDF/PPT 格式
 - [ ] 批次處理多個影片
 - [ ] 使用者帳號系統與分享功能
 - [ ] Redis 快取與 Celery 任務佇列
-- [ ] Docker 容器化部署
 
 ## 授權
 
