@@ -1,11 +1,11 @@
 # YouTube2Slides
 
-> 將 YouTube 影片轉換為靜態閱讀版本（投影片）的 Web 應用程式。
+> 將 YouTube 影片轉換為靜態閱讀版本(投影片)的 Web 應用程式。
 
-- 一鍵輸入 YouTube 連結，下載影片與字幕（手動或自動產生）。
-- 智慧斷句與字幕最佳化（支援中/日/韓等 CJK 字元）。
-- 擷取關鍵畫面，生成「逐頁幻燈片」觀看流程。
-- 可選擇翻譯與 AI 產生影片大綱（支援 OpenAI / Claude / Gemini / 本機 Ollama）。
+- 一鍵輸入 YouTube 連結,下載影片與字幕(手動或自動產生)。
+- 智慧斷句與字幕最佳化(支援中/日/韓等 CJK 字元)。
+- 擷取關鍵畫面,生成「逐頁幻燈片」觀看流程。
+- 可選擇翻譯與 AI 產生影片大綱(支援 OpenAI / Claude / Gemini / 本機 Ollama)。
 
 ## 功能特色
 
@@ -35,7 +35,7 @@
 ### 🪟 Windows 用戶
 
 
-#### 🔧 前置準備（必須）
+#### 🔧 前置準備(必須)
 1. **安裝 Python 3.9+**
    - [下載連結](https://www.python.org/downloads/)
    - 安裝時請勾選 **「Add Python to PATH」**
@@ -43,38 +43,37 @@
 
 2. **安裝 Node.js 16+**
    - [下載連結](https://nodejs.org/)
-   - 建議下載 **LTS（長期支援）版本**
+   - 建議下載 **LTS(長期支援)版本**
 
 
-3. **安裝 uv（Python 套件管理工具）**
-   - 開啟 PowerShell 並執行以下指令：
+3. **安裝 uv(Python 套件管理工具)**
+   - 開啟 PowerShell 並執行以下指令:
    ```powershell
    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
    ```
-   - 完成後重新開啟終端機，輸入 `uv --version` 驗證安裝成功
+   - 完成後重新開啟終端機,輸入 `uv --version` 驗證安裝成功
 
 
-4. **安裝 ffmpeg（必須）**
-   ffmpeg 是影片處理核心工具，必須安裝才能正常使用。
+4. **安裝 ffmpeg(必須)**
+   ffmpeg 是影片處理核心工具,必須安裝才能正常使用。
 
-   *方法 1：使用 Chocolatey（推薦）*
-   - 以系統管理員身份執行「PowerShell」，並一次貼上整段以下指令：
+   *方法 1:使用 Scoop(推薦)*
+   - 開啟 PowerShell 並執行以下指令安裝 Scoop:
    ```powershell
-   Set-ExecutionPolicy Bypass -Scope Process -Force; `
-   [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
-   iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+   Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
    ```
-   - 完成後輸入 `choco -v` 驗證安裝成功
-   - 透過 choco 安裝 ffmpeg：
+   - 完成後輸入 `scoop --version` 驗證安裝成功
+   - 透過 Scoop 安裝 ffmpeg:
    ```powershell
-   choco install ffmpeg
+   scoop install ffmpeg
    ```
    - 完成後輸入 `ffmpeg -version` 驗證安裝成功
    - ⚠️ 請重新開機
 
-   *方法 2：手動安裝*
+   *方法 2:手動安裝*
    - [下載 ffmpeg](https://www.gyan.dev/ffmpeg/builds/) → 選擇 **ffmpeg-release-essentials.zip**
-   - 解壓縮到任意位置（例：`C:\ffmpeg`）
+   - 解壓縮到任意位置(例:`C:\ffmpeg`)
    - 將 `bin` 路徑加入 **系統環境變數 PATH**
    - 重新開啟命令提示字元並輸入 `ffmpeg -version` 驗證
    - ⚠️ 請重新開機
@@ -93,16 +92,16 @@
 3️⃣ 雙擊執行 **`setup_and_start.bat`**
 
 
-此腳本會自動完成：
+此腳本會自動完成:
 - ✅ 檢查 Python / Node.js / ffmpeg / uv
 - ✅ 建立 Python 虛擬環境 & 安裝所需依賴
-- ✅ 啟動前後端服務器（port 8000；port 3000）
+- ✅ 啟動前後端服務器(port 8000;port 3000)
 - ✅ 自動開啟瀏覽器
 
-**注意事項：**
+**注意事項:**
 - 缺少必要環境會提示錯誤並提供安裝指引
 - 首次執行會需要較長時間安裝依賴
-- 程式會在 cmd 視窗中運行，關閉即可停止
+- 程式會在 cmd 視窗中運行,關閉即可停止
 
 ---
 
@@ -119,7 +118,7 @@
    ```
 
 #### ▶️ 啟動步驟
-進入專案根目錄後執行：
+進入專案根目錄後執行:
 ```bash
 python3 setup_and_start.py
 ```
@@ -200,7 +199,7 @@ YouTube2Slides/
 │   │   ├── components/
 │   │   │   ├── VideoInput.js       # 影片輸入表單與 AI 設定
 │   │   │   ├── ProcessingStatus.js # 處理進度顯示
-│   │   │   ├── SlideViewer.js      # 投影片檢視器（含鍵盤導航）
+│   │   │   ├── SlideViewer.js      # 投影片檢視器(含鍵盤導航)
 │   │   │   └── Sidebar.js          # 歷史記錄與資料夾管理
 │   │   ├── api/
 │   │   │   └── api.js              # API 客戶端
@@ -231,7 +230,7 @@ YouTube2Slides/
 Error: ffmpeg not found
 ```
 **解決方案**:
-1. 安裝 ffmpeg（參考上方安裝說明）
+1. 安裝 ffmpeg(參考上方安裝說明)
 2. 確保 ffmpeg 已加入系統 PATH
 3. 重新開啟命令提示字元或重啟電腦
 4. 執行 `ffmpeg -version` 驗證安裝成功
@@ -247,11 +246,11 @@ Error: No subtitles available
 ```
 Access to fetch has been blocked by CORS policy
 ```
-**解決方案**: 確認後端 CORS 設定正確，或在生產環境中設定具體的 origin
+**解決方案**: 確認後端 CORS 設定正確,或在生產環境中設定具體的 origin
 
 ## 未來改進
 
-- [ ] OCR 文字辨識（從投影片提取額外文字）
+- [ ] OCR 文字辨識(從投影片提取額外文字)
 - [ ] 匯出 PDF/PPT 格式
 - [ ] 批次處理多個影片
 - [ ] 使用者帳號系統與分享功能
