@@ -20,6 +20,7 @@ class YouTubeService:
             'quiet': True,
             'no_warnings': True,
             'extract_flat': False,
+            'extractor_args': {'youtube': {'player_client': ['android']}},
         }
 
         try:
@@ -81,6 +82,7 @@ class YouTubeService:
             'quiet': False,
             'no_warnings': True,
             'progress_hooks': [progress_hook],
+            'extractor_args': {'youtube': {'player_client': ['android']}},
         }
 
         try:
@@ -289,9 +291,10 @@ class YouTubeService:
             'subtitlesformat': 'srt',
             'outtmpl': str(subtitle_dir / f"{video_id}"),
             'quiet': False,
-            'sleep_interval': 1,  # Add delay between requests
+            'sleep_interval': 1,
             'max_sleep_interval': 5,
-            'retries': 3,  # Retry on errors
+            'retries': 3,
+            'extractor_args': {'youtube': {'player_client': ['android']}},
         }
 
         try:
