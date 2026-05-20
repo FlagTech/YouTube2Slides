@@ -101,6 +101,7 @@ class ProcessVideoResponse(BaseModel):
     subtitles: Dict[str, str]
     processing_time: float
     ai_outline: Optional[str] = None
+    ai_outline_error: Optional[str] = None
     translated_subtitle: Optional[str] = None
     ai_provider: Optional[str] = None
 

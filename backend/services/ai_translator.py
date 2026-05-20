@@ -370,7 +370,7 @@ Output ({len(texts)} translations):"""
             raise ValueError("OPENAI_API_KEY not configured")
 
         client = OpenAI(api_key=used_api_key)
-        model_name = model or "gpt-4o-mini"
+        model_name = model or "gpt-5.4-mini"
 
         prompt = self._get_translation_prompt(source_lang, target_lang, texts)
 
@@ -410,7 +410,7 @@ Output ({len(texts)} translations):"""
             raise ValueError("ANTHROPIC_API_KEY not configured")
 
         client = Anthropic(api_key=used_api_key)
-        model_name = model or "claude-sonnet-4-5-20250929"
+        model_name = model or "claude-sonnet-4-6"
 
         prompt = self._get_translation_prompt(source_lang, target_lang, texts)
 
@@ -441,21 +441,22 @@ Output ({len(texts)} translations):"""
         api_key: Optional[str] = None
     ) -> List[str]:
         """Translate using Gemini"""
-        import google.generativeai as genai
+        from google import genai
+        from google.genai import types as genai_types
 
         used_api_key = api_key or self.gemini_api_key
         if not used_api_key:
             raise ValueError("GEMINI_API_KEY not configured")
 
-        genai.configure(api_key=used_api_key)
-        model_name = model or "models/gemini-2.5-flash"
+        client = genai.Client(api_key=used_api_key)
+        model_name = model or "gemini-3.5-flash"
 
-        model_instance = genai.GenerativeModel(model_name)
         prompt = self._get_translation_prompt(source_lang, target_lang, texts)
 
-        response = model_instance.generate_content(
-            prompt,
-            generation_config=genai.types.GenerationConfig(
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt,
+            config=genai_types.GenerateContentConfig(
                 temperature=0.3,
                 max_output_tokens=4000,
             )
@@ -479,7 +480,7 @@ Output ({len(texts)} translations):"""
         api_key: Optional[str] = None
     ) -> List[str]:
         """Translate using Ollama"""
-        model_name = model or "llama3.2"
+        model_name = model or "qwen3:8b"
         prompt = self._get_translation_prompt(source_lang, target_lang, texts)
 
         # Calculate required output tokens (estimate: 3x input for Chinese)

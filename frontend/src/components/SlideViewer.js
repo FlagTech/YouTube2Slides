@@ -8,6 +8,7 @@ function SlideViewer({ result, onReset }) {
   const title = result?.title || '';
   const total_frames = result?.total_frames || 0;
   const ai_outline = result?.ai_outline || null;
+  const ai_outline_error = result?.ai_outline_error || null;
   const ai_provider = result?.ai_provider || null;
   const video_id = result?.video_id || '';
   const translated_subtitle = result?.translated_subtitle || null;
@@ -309,6 +310,21 @@ function SlideViewer({ result, onReset }) {
           <h3>📝 AI 影片大綱 {ai_provider && `(${ai_provider})`}</h3>
           <div className="ai-outline-content">
             <pre>{ai_outline}</pre>
+          </div>
+        </div>
+      )}
+
+      {!ai_outline && ai_outline_error && (
+        <div className="ai-outline-section ai-outline-error">
+          <h3>📝 AI 影片大綱</h3>
+          <div className="ai-outline-error-content">
+            <p>⚠️ AI 大綱產生失敗</p>
+            <p className="error-detail">{ai_outline_error}</p>
+            <p className="error-hint">
+              {ai_outline_error.includes('Ollama') || ai_outline_error.includes('Connection') || ai_outline_error.includes('connect')
+                ? '請確認 Ollama 服務已啟動（ollama serve），並已下載所需模型（ollama pull qwen3:8b）'
+                : '請確認 API 金鑰正確，或稍後再試'}
+            </p>
           </div>
         </div>
       )}

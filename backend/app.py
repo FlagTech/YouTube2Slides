@@ -570,6 +570,7 @@ def process_video_task(job_id: str, request: ProcessVideoRequest):
             message="影格最佳化完成"
         )
         ai_outline = None
+        ai_outline_error = None
         ai_provider_used = None
         if request.generate_outline and request.ai_provider:
             log_job_progress(
@@ -598,12 +599,14 @@ def process_video_task(job_id: str, request: ProcessVideoRequest):
                     message="AI 大綱產生完成"
                 )
             except Exception as e:
-                print(f"AI outline generation failed: {str(e)}")
+                error_msg = str(e)
+                print(f"AI outline generation failed: {error_msg}")
+                ai_outline_error = error_msg
                 log_job_progress(
                     job_id,
                     step="ai_outline",
                     progress=95,
-                    message="AI 大綱產生失敗，略過"
+                    message=f"AI 大綱產生失敗：{error_msg}"
                 )
         else:
             log_job_progress(
@@ -627,6 +630,7 @@ def process_video_task(job_id: str, request: ProcessVideoRequest):
             subtitles=subtitles,
             processing_time=processing_time,
             ai_outline=ai_outline,
+            ai_outline_error=ai_outline_error,
             ai_provider=ai_provider_used,
             translated_subtitle=translated_subtitle_path
         )

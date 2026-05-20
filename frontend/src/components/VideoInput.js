@@ -51,7 +51,7 @@ function VideoInput({ onSubmit }) {
       if (data.models && data.models.length > 0) {
         setOllamaModels(data.models);
         // Set first model as default if no model is selected
-        if (!aiModel || aiModel === 'gpt-4o-mini' || aiModel === 'claude-sonnet-4-5-20250929') {
+        if (!aiModel || aiModel === 'gpt-5.4-mini' || aiModel === 'claude-sonnet-4-6') {
           setAiModel(data.models[0].name);
         }
       } else {
@@ -117,14 +117,14 @@ function VideoInput({ onSubmit }) {
     setAiProvider(provider);
     // Set default model based on provider
     if (provider === 'openai') {
-      setAiModel('gpt-4o-mini');
+      setAiModel('gpt-5.4-mini');
     } else if (provider === 'claude') {
-      setAiModel('claude-sonnet-4-5-20250929');
+      setAiModel('claude-sonnet-4-6');
     } else if (provider === 'gemini') {
-      setAiModel('models/gemini-2.5-flash');
+      setAiModel('gemini-3.5-flash');
     } else if (provider === 'ollama') {
       // Will be set when models are loaded
-      setAiModel('llama3.2');
+      setAiModel('qwen3:8b');
     }
   };
 
@@ -132,28 +132,26 @@ function VideoInput({ onSubmit }) {
     switch (aiProvider) {
       case 'openai':
         return [
-          { value: 'gpt-4o', label: 'GPT-4o (Latest)' },
-          { value: 'gpt-4o-mini', label: 'GPT-4o Mini (Recommended)' },
-          { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
-          { value: 'gpt-4', label: 'GPT-4' },
-          { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo (Fastest)' }
+          { value: 'gpt-5.4-mini', label: 'GPT-5.4 Mini (推薦)' },
+          { value: 'gpt-5.5', label: 'GPT-5.5 (旗艦)' },
+          { value: 'gpt-5.5-pro', label: 'GPT-5.5 Pro (最高精度)' },
+          { value: 'gpt-5.4', label: 'GPT-5.4' },
+          { value: 'gpt-4o', label: 'GPT-4o (舊版)' },
+          { value: 'gpt-4o-mini', label: 'GPT-4o Mini (舊版)' }
         ];
       case 'claude':
         return [
-          { value: 'claude-sonnet-4-5-20250929', label: 'Claude Sonnet 4.5 (Latest)' },
-          { value: 'claude-opus-4-1-20250805', label: 'Claude Opus 4.1 (Advanced)' },
-          { value: 'claude-sonnet-4-20250514', label: 'Claude Sonnet 4' },
-          { value: 'claude-opus-4-20250514', label: 'Claude Opus 4' },
-          { value: 'claude-3-5-sonnet-20241022', label: 'Claude 3.5 Sonnet' }
+          { value: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6 (推薦)' },
+          { value: 'claude-opus-4-7', label: 'Claude Opus 4.7 (最強)' },
+          { value: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5 (最快)' }
         ];
       case 'gemini':
         return [
-          { value: 'models/gemini-2.5-pro', label: 'Gemini 2.5 Pro (Latest - Most Intelligent)' },
-          { value: 'models/gemini-2.5-flash', label: 'Gemini 2.5 Flash (Recommended)' },
-          { value: 'models/gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash-Lite (Fastest)' },
-          { value: 'models/gemini-2.0-flash', label: 'Gemini 2.0 Flash' },
-          { value: 'models/gemini-2.0-flash-lite', label: 'Gemini 2.0 Flash-Lite' },
-          { value: 'models/gemini-flash-latest', label: 'Gemini Flash (Always Latest)' }
+          { value: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash (推薦)' },
+          { value: 'gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro Preview (最強)' },
+          { value: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash Lite (最省錢)' },
+          { value: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro (上一代)' },
+          { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash (上一代)' }
         ];
       case 'ollama':
         return ollamaModels.map(model => ({

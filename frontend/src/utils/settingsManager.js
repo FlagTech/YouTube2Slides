@@ -48,7 +48,7 @@ export const getDefaultSettings = () => {
     translateTo: '',
     generateOutline: false,
     aiProvider: 'openai',
-    aiModel: 'gpt-4o-mini',
+    aiModel: 'gpt-5.4-mini',
     apiKey: ''
   };
 };

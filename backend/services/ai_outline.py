@@ -118,7 +118,7 @@ class AIOutlineService:
             from openai import OpenAI
 
             client = OpenAI(api_key=used_api_key)
-            model_name = model or "gpt-4o-mini"
+            model_name = model or "gpt-5.4-mini"
 
             prompt = self._prepare_prompt(video_title, video_description, subtitles)
 
@@ -162,7 +162,7 @@ class AIOutlineService:
             from anthropic import Anthropic
 
             client = Anthropic(api_key=used_api_key)
-            model_name = model or "claude-sonnet-4-5-20250929"
+            model_name = model or "claude-sonnet-4-6"
 
             prompt = self._prepare_prompt(video_title, video_description, subtitles)
 
@@ -202,18 +202,18 @@ class AIOutlineService:
             raise ValueError("GEMINI_API_KEY not configured")
 
         try:
-            import google.generativeai as genai
+            from google import genai
+            from google.genai import types as genai_types
 
-            genai.configure(api_key=used_api_key)
-            model_name = model or "models/gemini-2.5-flash"
-
-            model_instance = genai.GenerativeModel(model_name)
+            client = genai.Client(api_key=used_api_key)
+            model_name = model or "gemini-3.5-flash"
 
             prompt = self._prepare_prompt(video_title, video_description, subtitles)
 
-            response = model_instance.generate_content(
-                prompt,
-                generation_config=genai.types.GenerationConfig(
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config=genai_types.GenerateContentConfig(
                     temperature=0.7,
                     max_output_tokens=2000,
                 )
@@ -241,7 +241,7 @@ class AIOutlineService:
     ) -> Dict:
         """Generate outline using Ollama (local LLM)"""
         try:
-            model_name = model or "llama3.2"
+            model_name = model or "qwen3:8b"
 
             prompt = self._prepare_prompt(video_title, video_description, subtitles)
 
